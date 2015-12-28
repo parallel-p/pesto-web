@@ -6,9 +6,9 @@ def parse_poldnev(file_name, db_name):
     f.readline()
     for i in f:
         person_id, person_last_names, person_first_names, person_middle_name, session_name, parallel = f.readline().split('\t')
-        sqlite_connection.cursor().execute('INSERT INTO stats_users (person_id, person_last_names, person_first_names, person_middle_name, session_name, parallel) '
-                                           'VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}")'
-                                           .format(person_id, person_last_names, person_first_names, person_middle_name, session_name, parallel))
+        sqlite_connection.cursor().execute('INSERT INTO stats_user (id, name) '
+                                           'VALUES ("{0}", "{1}")'
+                                           .format(person_id, person_last_names + person_first_names + person_middle_name))
 
     f.close()
     sqlite_connection.commit()
