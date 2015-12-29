@@ -1,0 +1,12 @@
+<style>
+td{border:1px solid gray;padding:2px;}
+div{float:left;margin-left:10px;}
+table{border-collapse:collapse}
+</style>
+{% for year,year_res in result.items %}
+    <div><b>{{ year }}:</b> <table>
+    {% for theme, count in year_res %}
+        <tr><td>{{ theme }}</td><td>{{ count }}</td></tr>
+    {% endfor %}
+    </table></div>
+{% endfor %}
