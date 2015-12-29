@@ -24,9 +24,8 @@ class Contest(models.Model):
     day = models.IntegerField()
 
 class Problem(models.Model):
-    polygon_id = models.CharField(max_length=30)
     name = models.CharField(max_length=30)
-    contest_id = models.ForeignKey('Contest')
+    contest = models.ForeignKey('Contest')
 
 class Language(models.Model):
     name = models.CharField(max_length=30)
@@ -54,5 +53,5 @@ class Submit(models.Model):
         ('PR', 'Pending Review'),
         ('RJ', 'Rejected'),
         ('SK', 'Skipped')))
-    lang_id = models.ForeignKey('Language')
+    lang = models.ForeignKey('Language')
 
