@@ -28,12 +28,14 @@ class Contest(models.Model):
     season = models.ForeignKey('Season')
     parallel = models.ForeignKey('Parallel')
     day = models.IntegerField()
+    theme = models.ForeignKey('Theme')
     class Meta:
         ordering = ['day']
     
 class Problem(models.Model):
     name = models.CharField(max_length=30)
     contest = models.ForeignKey('Contest')
+    theme = models.ForeignKey('Theme')
 
 class Language(models.Model):
     name = models.CharField(max_length=30)
@@ -63,3 +65,5 @@ class Submit(models.Model):
         ('SK', 'Skipped')))
     lang = models.ForeignKey('Language')
 
+class Theme(models.Model):
+    name = models.CharField(max_length=50)
