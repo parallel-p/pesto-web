@@ -54,30 +54,42 @@ def parse_ejudge(sqlite_dir, mysql_config):
 
     mysql_cur.execute('SELECT contest_id, prob_id, lang_id, status, user_id FROM runs')
 
-    ids = {}
-    first_l = []
-    second_l = []
-    third_l = []
+    ids_for_problem = {}
+    ids_for_contests = {}
+    ids_for_users = {}
+
+    list_for_problems = []
+    list_for_submits = []
+    list_for_contests = []
+    list_for_users = []
 
     for i in mysql_cur:
-        first_l.append( (i[0], i[1]) )
-        second_l.append(i)
-        third_l.append(i[0])
+        list_for_problems.append([i[0], i[1]])
+        list_for_submits.append(i)
+        list_for_contests.append(i[0])
+        list_for_users.append(i[4])
 
-    for i in list(set(first_l)):
-        sqlite_cur.execute('INSERT INTO stats_problem (contest_id, prob_id, polygon_id, name) VALUES ({0}, {1}, 0, 0)'.format(i[0], i[1]))
-        ids[i] = sqlite_cur.lastrowid
+    for i in list(set(list_for_users)):
+        sqlite_cur.execute('INSERT INTO stats_user (user_id) VALUES ({0})'.format(i))
+        ids_for_users[i] = sqlite_cur.lastrowid
+
+    for i in list(set(list_for_contests)):
+        sqlite_cur.execute('INSERT INTO stats_contest (contest_id) VALUES ({0})'.format(i))
+        ids_for_contests[i] = sqlite_cur.lastrowid
+
+    for i in list(set(list_for_problems)):
+        sqlite_cur.execute('INSERT INTO stats_problem (problem_id, contest_id) VALUES ({0}, {1})'.format(i[1], ids_for_contests[i[0]]))
+        ids_for_problem[i] = sqlite_cur.lastrowid
 
     import logging
-    for i in second_l:
+    for i in list_for_submits:
         try:
-            sqlite_cur.execute("INSERT INTO stats_submit (outcome, lang_id, problem_id, user_id) VALUES ('{0}', {1}, {2}, {3})".format(ejudge_status[i[3]], i[2], ids[i[0], i[1]], i[4]))
+            sqlite_cur.execute("INSERT INTO stats_submit (outcome, lang_id, problem_id, user_id) VALUES ('{0}', {1}, {2}, {3})".format(ejudge_status[i[3]], i[2], ids_for_problem[i[0], i[1]], ids_for_users[i[4]]))
         except KeyError:
             pass
             # logging('fuck the ' + i[3].__str__())
 
-    for i in list(set(third_l)):
-        sqlite_cur.execute('INSERT INTO stats_contest (contest_id) VALUES ({0})'.format(i))
+
 
     sqlite_db.close_connection()
     mysql_db.close_connection()
