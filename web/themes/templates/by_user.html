@@ -1,12 +1,14 @@
 <style>
-td{border:1px solid gray;padding:2px;}
-div{float:left;margin-left:10px;}
-table{border-collapse:collapse}
+.stats td{vertical-align:top}
+.themes td{border:1px solid gray;padding:2px;}
+.themes{border-collapse:collapse}
 </style>
+<table class="stats"><tr>
 {% for year,year_res in result %}
-    <div><b>{{ year }}:</b> <table>
+    <td><b>{{ year }}:</b> <table class="themes">
     {% for theme, count in year_res %}
         <tr><td>{{ theme }}</td><td>{{ count }}</td></tr>
     {% endfor %}
-    </table></div>
+    </table></td>
 {% endfor %}
+</tr></table>
