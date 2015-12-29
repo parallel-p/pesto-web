@@ -4,13 +4,19 @@ class Season(models.Model):
     name = models.CharField(max_length=50)
     year = models.IntegerField()
     order = models.IntegerField()
+    class Meta:
+        ordering = ['order']
 
 class Parallel(models.Model):
     name = models.CharField(max_length=30)
+    class Meta:
+        ordering = ['name']
 
 class User(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    class Meta:
+        ordering = ['last_name', 'first_name']
 
 class Participation(models.Model):
     user = models.ForeignKey('User')
@@ -22,7 +28,9 @@ class Contest(models.Model):
     season = models.ForeignKey('Season')
     parallel = models.ForeignKey('Parallel')
     day = models.IntegerField()
-
+    class Meta:
+        ordering = ['day']
+    
 class Problem(models.Model):
     name = models.CharField(max_length=30)
     contest = models.ForeignKey('Contest')
