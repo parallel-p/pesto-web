@@ -6,13 +6,13 @@ from .models import UserResult
 
 def themes_by_user(request, user_id):
     user = get_object_or_404(User, pk=user_id)
-    years = UserResult.objects.filter(user=user).values('year').distinct()
-    years = [str(i['year']) for i in years]
+    parts = UserResult.objects.filter(user=user).values('participation').distinct().order_by('participation')
+    parts = [str(i['participation']) for i in parts]
     result = []
-    for year in years:
-        year_res = UserResult.objects.filter(user=user).filter(year=year).order_by('solved')
-        result.append([year, []])
-        for theme_res in year_res[::-1]:
+    for part in parts:
+        part_res = UserResult.objects.filter(user=user).filter(participation=part).order_by('solved')
+        result.append([str(part_res[0].participation), []])
+        for theme_res in part_res[::-1]:
             result[-1][1].append([theme_res.theme.name, theme_res.solved])
     template = loader.get_template('by_user.html')
     return template.render({'result': result}, request)
