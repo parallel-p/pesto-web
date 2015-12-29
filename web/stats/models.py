@@ -29,7 +29,7 @@ class Problem(models.Model):
     contest_id = models.ForeignKey('Contest')
 
 class Language(models.Model):
-    name = models.CharField(max_length=2)
+    name = models.CharField(max_length=30)
 
 class Submit(models.Model):
     problem = models.ForeignKey('Problem')
