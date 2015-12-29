@@ -54,7 +54,7 @@ def parse_ejudge(sqlite_dir, mysql_config):
 
     mysql_cur.execute('SELECT contest_id, prob_id, lang_id, status, user_id FROM runs')
 
-    ids_for_problem = {}
+    ids_for_problems = {}
     ids_for_contests = {}
     ids_for_users = {}
 
@@ -64,7 +64,7 @@ def parse_ejudge(sqlite_dir, mysql_config):
     list_for_users = []
 
     for i in mysql_cur:
-        list_for_problems.append([i[0], i[1]])
+        list_for_problems.append((i[0], i[1]))
         list_for_submits.append(i)
         list_for_contests.append(i[0])
         list_for_users.append(i[4])
@@ -79,12 +79,12 @@ def parse_ejudge(sqlite_dir, mysql_config):
 
     for i in list(set(list_for_problems)):
         sqlite_cur.execute('INSERT INTO stats_problem (problem_id, contest_id) VALUES ({0}, {1})'.format(i[1], ids_for_contests[i[0]]))
-        ids_for_problem[i] = sqlite_cur.lastrowid
+        ids_for_problems[i] = sqlite_cur.lastrowid
 
     import logging
     for i in list_for_submits:
         try:
-            sqlite_cur.execute("INSERT INTO stats_submit (outcome, lang_id, problem_id, user_id) VALUES ('{0}', {1}, {2}, {3})".format(ejudge_status[i[3]], i[2], ids_for_problem[i[0], i[1]], ids_for_users[i[4]]))
+            sqlite_cur.execute("INSERT INTO stats_submit (outcome, lang_id, problem_id, user_id) VALUES ('{0}', {1}, {2}, {3})".format(ejudge_status[i[3]], i[2], ids_for_problems[i[0], i[1]], ids_for_users[i[4]]))
         except KeyError:
             pass
             # logging('fuck the ' + i[3].__str__())
