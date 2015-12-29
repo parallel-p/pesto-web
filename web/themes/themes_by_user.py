@@ -9,6 +9,8 @@ def themes_by_user(request, user_id):
     result = []
     for part in parts:
         part_res = UserResult.objects.filter(participation=part).order_by('solved')
+        if not part_res:
+            continue
         result.append([str(part), []])
         for theme_res in part_res[::-1]:
             result[-1][1].append([theme_res.theme.name, theme_res.solved])
