@@ -25,6 +25,7 @@ class Participation(models.Model):
 
 class Contest(models.Model):
     name = models.CharField(max_length=50)
+    contest_id = models.CharField(max_length=10)
     season = models.ForeignKey('Season')
     parallel = models.ForeignKey('Parallel')
     day = models.IntegerField()
