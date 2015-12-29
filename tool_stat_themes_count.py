@@ -32,14 +32,15 @@ for submit in cursor.fetchall():
 stats = dict()
 for p in solved:
     cursor.execute("SELECT theme_id FROM stats_problem WHERE id=?", (p[1],))
-    key = (participation_id, cursor.fetchone()[0])
+    key = (p[0], cursor.fetchone()[0])
     if key in stats:
         stats[key] += 1
     else:
         stats[key] = 1
 
 for row in stats:
-    cursor.execute("INSERT INTO themes_userresults VALUES (NULL,?,?,?)", (row[0], row[1], stats[row]))
+    cursor.execute("INSERT INTO themes_userresult (participation_id, theme_id, solved) VALUES (?,?,?)",
+        (row[0], row[1], stats[row]))
 
 conn.commit()
 conn.close()
