@@ -10,7 +10,10 @@ def themes_by_user(request, user_id):
     result = []
     for part in parts:
         part_res = UserResult.objects.filter(participation=part).order_by('solved')
-        result.append([str(part_res[0].participation), []])
+        try:
+            result.append([str(part_res[0].participation), []])
+        except IndexError:
+            continue
         for theme_res in part_res[::-1]:
             result[-1][1].append([theme_res.theme.name, theme_res.solved])
     template = loader.get_template('by_user.html')
