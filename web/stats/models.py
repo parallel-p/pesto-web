@@ -6,44 +6,57 @@ class Season(models.Model):
     order = models.IntegerField()
     class Meta:
         ordering = ['order']
+        
+    def __str__(self):
+        return self.name
 
 class Parallel(models.Model):
     name = models.CharField(max_length=30)
     class Meta:
         ordering = ['name']
+    def __str__(self):
+        return self.name
 
 class User(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     class Meta:
         ordering = ['last_name', 'first_name']
+    def __str__(self):
+        return self.last_name + ' ' + self.first_name
 
 class Participation(models.Model):
-    user = models.ForeignKey('User')
-    season = models.ForeignKey('Season')
-    parallel = models.ForeignKey('Parallel')
+    user = models.ForeignKey('User', null=True)
+    season = models.ForeignKey('Season', null=True)
+    parallel = models.ForeignKey('Parallel', null=True)
 
 class Contest(models.Model):
     name = models.CharField(max_length=50)
     contest_id = models.CharField(max_length=10)
-    season = models.ForeignKey('Season')
-    parallel = models.ForeignKey('Parallel')
+    season = models.ForeignKey('Season', null=True)
+    parallel = models.ForeignKey('Parallel', null=True)
     day = models.IntegerField()
-    theme = models.ForeignKey('Theme')
+    theme = models.ForeignKey('Theme', null=True)
     class Meta:
         ordering = ['day']
+    def __str__(self):
+        return self.name
     
 class Problem(models.Model):
     name = models.CharField(max_length=30)
-    contest = models.ForeignKey('Contest')
-    theme = models.ForeignKey('Theme')
+    contest = models.ForeignKey('Contest', null=True)
+    theme = models.ForeignKey('Theme', null=True)
+    def __str__(self):
+        return self.name
 
 class Language(models.Model):
     name = models.CharField(max_length=30)
+    def __str__(self):
+        return self.name
 
 class Submit(models.Model):
-    problem = models.ForeignKey('Problem')
-    participation = models.ForeignKey('Participation')
+    problem = models.ForeignKey('Problem', null=True)
+    participation = models.ForeignKey('Participation', null=True)
     outcome = models.CharField(max_length=2, choices=(
         ('OK', 'OK'),
         ('CE', 'Compilation Error'),
@@ -64,7 +77,9 @@ class Submit(models.Model):
         ('PR', 'Pending Review'),
         ('RJ', 'Rejected'),
         ('SK', 'Skipped')))
-    lang = models.ForeignKey('Language')
+    lang = models.ForeignKey('Language', null=True)
 
 class Theme(models.Model):
     name = models.CharField(max_length=50)
+    def __str__(self):
+        return self.name
