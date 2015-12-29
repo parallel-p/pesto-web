@@ -47,32 +47,37 @@ def parse_ejudge(sqlite_dir, mysql_config):
                      17: 'RJ',
                      18: 'SK'}
 
-
-
     sqlite_db = SQLiteConnector(sqlite_dir)
     mysql_db = MySQLConnector(mysql_config)
-
     mysql_cur = mysql_db.get_cursor()
     sqlite_cur = sqlite_db.get_cursor()
+
+    mysql_cur.execute('SELECT contest_id, prob_id, lang_id, status, user_id FROM runs')
+
     ids = {}
-    mysql_cur.execute('SELECT contest_id, prob_id FROM runs')
-    for i in list(set(mysql_cur)):
+    first_l = []
+    second_l = []
+    third_l = []
+
+    for i in mysql_cur:
+        first_l.append( (i[0], i[1]) )
+        second_l.append(i)
+        third_l.append(i[0])
+
+    for i in list(set(first_l)):
         sqlite_cur.execute('INSERT INTO stats_problem (contest_id, prob_id, polygon_id, name) VALUES ({0}, {1}, 0, 0)'.format(i[0], i[1]))
         ids[i] = sqlite_cur.lastrowid
 
-    mysql_cur = mysql_db.get_cursor()
-    sqlite_cur = sqlite_db.get_cursor()
-    mysql_cur.execute('SELECT contest_id, prob_id, lang_id, status, user_id FROM runs')
-    for i in mysql_cur:
+    import logging
+    for i in second_l:
         try:
             sqlite_cur.execute("INSERT INTO stats_submit (outcome, lang_id, problem_id, user_id) VALUES ('{0}', {1}, {2}, {3})".format(ejudge_status[i[3]], i[2], ids[i[0], i[1]], i[4]))
         except KeyError:
-            print('fuck the ' + i[3].__str__())
+            pass
+            # logging('fuck the ' + i[3].__str__())
 
-
-
-
-
+    for i in list(set(third_l)):
+        sqlite_cur.execute('INSERT INTO stats_contest (contest_id) VALUES ({0})'.format(i))
 
     sqlite_db.close_connection()
     mysql_db.close_connection()
