@@ -29,12 +29,7 @@ class TestThemesByUser(TestCase):
         ur2.save()
         ur3.save()
         res = themes_by_user(None, 1)
-        good = '''<style>
-.stats td{vertical-align:top}
-.themes td{border:1px solid gray;padding:2px;}
-.themes{border-collapse:collapse}
-</style>
-<table class="stats"><tr>
+        good = '''<table class="stats"><tr>
 
     <td><b>s1 p1:</b> <table class="themes">
     
@@ -76,12 +71,7 @@ class TestThemesByUser(TestCase):
         ur1.save()
         ur2.save()
         res = themes_by_user(None, 1)
-        good = '''<style>
-.stats td{vertical-align:top}
-.themes td{border:1px solid gray;padding:2px;}
-.themes{border-collapse:collapse}
-</style>
-<table class="stats"><tr>
+        good = '''<table class="stats"><tr>
 
     <td><b>s1 p1:</b> <table class="themes">
     
