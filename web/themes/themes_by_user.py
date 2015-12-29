@@ -5,7 +5,7 @@ from .models import UserResult
 
 def themes_by_user(request, user_id):
     user = get_object_or_404(User, pk=user_id)
-    parts = Participation.objects.filter(user=user).distinct().order_by('season')
+    parts = Participation.objects.filter(user=user).order_by('season')
     result = []
     for part in parts:
         part_res = UserResult.objects.filter(participation=part).order_by('solved')

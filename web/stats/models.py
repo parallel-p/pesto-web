@@ -31,8 +31,6 @@ class Participation(models.Model):
     parallel = models.ForeignKey('Parallel', null=True)
     def __str__(self):
         return str(self.season) + ' ' + str(self.parallel)
-    class Meta:
-        ordering = ['season']
 
 class Contest(models.Model):
     name = models.CharField(max_length=50)
