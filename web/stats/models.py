@@ -32,7 +32,7 @@ class Participation(models.Model):
 
 class Contest(models.Model):
     name = models.CharField(max_length=50)
-    contest_id = models.CharField(max_length=10)
+    contest_id = models.CharField(max_length=10, default='')
     season = models.ForeignKey('Season', null=True)
     parallel = models.ForeignKey('Parallel', null=True)
     day = models.IntegerField()
