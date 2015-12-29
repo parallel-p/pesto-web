@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from django.template import loader
 from stats.models import User, Participation
 from .models import UserResult
 
@@ -16,5 +15,4 @@ def themes_by_user(request, user_id):
             continue
         for theme_res in part_res[::-1]:
             result[-1][1].append([theme_res.theme.name, theme_res.solved])
-    template = loader.get_template('by_user.html')
-    return template.render({'result': result}, request)
+    return result

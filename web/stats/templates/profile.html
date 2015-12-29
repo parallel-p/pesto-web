@@ -14,7 +14,15 @@
         </table>
         <h2>Статистики</h2>
         <div>
-        {{ themes }}
+        <table class="stats"><tr>
+        {% for year,year_res in themes %}
+            <td><b>{{ year }}:</b> <table class="themes">
+            {% for theme, count in year_res %}
+                <tr><td>{{ theme }}</td><td>{{ count }}</td></tr>
+            {% endfor %}
+            </table></td>
+        {% endfor %}
+        </tr></table>
         </div>
         <p>
         <font face="Comic Sans MS">HERE BE DRAGONS</font>

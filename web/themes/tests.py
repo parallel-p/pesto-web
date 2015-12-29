@@ -29,25 +29,8 @@ class TestThemesByUser(TestCase):
         ur2.save()
         ur3.save()
         res = themes_by_user(None, 1)
-        good = '''<table class="stats"><tr>
-
-    <td><b>s1 p1:</b> <table class="themes">
-    
-        <tr><td>t2</td><td>2</td></tr>
-    
-        <tr><td>t1</td><td>1</td></tr>
-    
-    </table></td>
-
-    <td><b>s2 p1:</b> <table class="themes">
-    
-        <tr><td>t1</td><td>3</td></tr>
-    
-    </table></td>
-
-</tr></table>
-'''
-        self.assertEqual(res.strip(), good.strip())
+        good = [['s1 p1', [['t2', 2], ['t1', 1]]], ['s2 p1', [['t1', 3]]]]
+        self.assertEqual(res, good)
         
     def test_no_result(self):
         u = User(first_name='f', last_name='l')
@@ -71,16 +54,5 @@ class TestThemesByUser(TestCase):
         ur1.save()
         ur2.save()
         res = themes_by_user(None, 1)
-        good = '''<table class="stats"><tr>
-
-    <td><b>s1 p1:</b> <table class="themes">
-    
-        <tr><td>t2</td><td>2</td></tr>
-    
-        <tr><td>t1</td><td>1</td></tr>
-    
-    </table></td>
-
-</tr></table>
-'''
-        self.assertEqual(res.strip(), good.strip())
+        good = [['s1 p1', [['t2', 2], ['t1', 1]]]]
+        self.assertEqual(res, good)
