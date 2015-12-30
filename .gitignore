@@ -82,3 +82,5 @@ data/
 
 # Linux
 *.swp
+
+web/db.sqlite3

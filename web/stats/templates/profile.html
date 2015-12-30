@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>{{user.first_name}} {{user.last_name}} - pesto-web</title>
+        <link rel="stylesheet" href="/static/style.css">
     </head>
 
     <body>
@@ -11,7 +12,19 @@
                 <td>{{user.id}}</td>
             </tr>
         </table>
-        <h2>Статистики</h1>
+        <h2>Статистики</h2>
+        <div>
+        <table class="stats"><tr>
+        {% for year_res in themes %}
+            <td><b>{{ year_res.part }}:</b> <table class="themes">
+            {% for theme, count in year_res.themes %}
+                <tr><td>{{ theme }}</td><td>{{ count }}</td></tr>
+            {% endfor %}
+            </table></td>
+        {% endfor %}
+        </tr></table>
+        </div>
+        <p>
         <font face="Comic Sans MS">HERE BE DRAGONS</font>
     </body>
 </html>
