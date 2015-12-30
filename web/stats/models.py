@@ -83,6 +83,7 @@ class Submit(models.Model):
     lang = models.ForeignKey('Language', null=True)
     submit_id = models.IntegerField(null=True)
     user_id = models.IntegerField(null=True)
+    timestamp = models.IntegerField(null=True)
 
 class Theme(models.Model):
     name = models.CharField(max_length=50)
