@@ -46,7 +46,7 @@ class Contest(models.Model):
         return self.name or ''
     
 class Problem(models.Model):
-    name = models.CharField(max_length=30, blank=True)
+    name = models.CharField(max_length=30, blank=True, default='')
     contest = models.ForeignKey('Contest', null=True)
     theme = models.ForeignKey('Theme', null=True)
     def __str__(self):
