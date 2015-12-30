@@ -20,11 +20,11 @@ class Parallel(models.Model):
 class User(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    user_id = models.IntegerField()
     class Meta:
         ordering = ['last_name', 'first_name']
     def __str__(self):
         return self.last_name + ' ' + self.first_name
+    user_id = models.IntegerField()
 
 class Participation(models.Model):
     user = models.ForeignKey('User', null=True)
@@ -47,11 +47,11 @@ class Contest(models.Model):
     
 class Problem(models.Model):
     name = models.CharField(max_length=30)
-    problem_id = models.IntegerField()
     contest = models.ForeignKey('Contest', null=True)
     theme = models.ForeignKey('Theme', null=True)
     def __str__(self):
         return self.name
+    problem_id = models.IntegerField()
 
 class Language(models.Model):
     name = models.CharField(max_length=30)
@@ -59,15 +59,6 @@ class Language(models.Model):
         return self.name
 
 class Submit(models.Model):
-    problem = models.ForeignKey('Problem')
-    outcome = models.CharField(max_length=30)
-    user = models.ForeignKey('User')
-    lang_id = models.CharField(max_length=30)
-    submit_id = models.IntegerField()
-
-class Contest:
-    name = models.CharField(max_length=30)
-    contest_id = models.IntegerField()
     problem = models.ForeignKey('Problem', null=True)
     participation = models.ForeignKey('Participation', null=True)
     outcome = models.CharField(max_length=2, choices=(
@@ -91,6 +82,13 @@ class Contest:
         ('RJ', 'Rejected'),
         ('SK', 'Skipped')))
     lang = models.ForeignKey('Language', null=True)
+    lang_id = models.CharField(max_length=30)
+    submit_id = models.IntegerField()
+
+class Contest:
+    name = models.CharField(max_length=30)
+    contest_id = models.IntegerField()
+    theme = models.ForeignKey('Theme', null=True)
 
 class Theme(models.Model):
     name = models.CharField(max_length=50)
