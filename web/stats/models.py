@@ -18,8 +18,8 @@ class Parallel(models.Model):
         return self.name
 
 class User(models.Model):
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30, null=True)
+    last_name = models.CharField(max_length=30, null=True)
     class Meta:
         ordering = ['last_name', 'first_name']
     def __str__(self):
@@ -34,11 +34,11 @@ class Participation(models.Model):
         return str(self.season) + ' ' + str(self.parallel)
 
 class Contest(models.Model):
-    name = models.CharField(max_length=50)
-    contest_id = models.CharField(max_length=10, default='')
+    name = models.CharField(max_length=50, null=True)
+    contest_id = models.IntegerField(null=True)
     season = models.ForeignKey('Season', null=True)
     parallel = models.ForeignKey('Parallel', null=True)
-    day = models.IntegerField()
+    day = models.IntegerField(null=True)
     theme = models.ForeignKey('Theme', null=True)
     class Meta:
         ordering = ['day']
@@ -46,7 +46,7 @@ class Contest(models.Model):
         return self.name
     
 class Problem(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, null=True)
     contest = models.ForeignKey('Contest', null=True)
     theme = models.ForeignKey('Theme', null=True)
     def __str__(self):
@@ -83,6 +83,7 @@ class Submit(models.Model):
         ('SK', 'Skipped')))
     lang = models.ForeignKey('Language', null=True)
     submit_id = models.IntegerField(null=True)
+    user_id = models.IntegerField(null=True)
 
 class Theme(models.Model):
     name = models.CharField(max_length=50)

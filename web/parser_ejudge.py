@@ -27,6 +27,9 @@ class MySQLConnector():
         self.connection.close()
 
 def parse_ejudge(sqlite_dir, mysql_config):
+    import os.path
+    print(os.path.abspath(sqlite_dir))
+
     ejudge_status = {0: 'OK',
                      1: 'CE',
                      2: 'RT',
@@ -47,12 +50,16 @@ def parse_ejudge(sqlite_dir, mysql_config):
                      17: 'RJ',
                      18: 'SK'}
 
+    print('CONNECTING TO DATA...', end='')
     sqlite_db = SQLiteConnector(sqlite_dir)
     mysql_db = MySQLConnector(mysql_config)
     mysql_cur = mysql_db.get_cursor()
     sqlite_cur = sqlite_db.get_cursor()
+    print('OK')
 
+    print('READING DATA...', end='')
     mysql_cur.execute('SELECT contest_id, prob_id, lang_id, status, user_id FROM runs')
+    print('OK')
 
     ids_for_problems = {}
     ids_for_contests = {}
@@ -69,25 +76,33 @@ def parse_ejudge(sqlite_dir, mysql_config):
         list_for_contests.append(i[0])
         list_for_users.append(i[4])
 
-    for i in list(set(list_for_users)):
+    print('WRITING USERS...', end='')
+    for i in set(list_for_users):
         sqlite_cur.execute('INSERT INTO stats_user (user_id) VALUES ({0})'.format(i))
         ids_for_users[i] = sqlite_cur.lastrowid
+    print('OK')
 
-    for i in list(set(list_for_contests)):
+    print('WRITING CONTESTS...', end='')
+    for i in set(list_for_contests):
         sqlite_cur.execute('INSERT INTO stats_contest (contest_id) VALUES ({0})'.format(i))
         ids_for_contests[i] = sqlite_cur.lastrowid
+    print('OK')
 
-    for i in list(set(list_for_problems)):
+    print('WRITING PROBLEMS...', end='')
+    for i in set(list_for_problems):
         sqlite_cur.execute('INSERT INTO stats_problem (problem_id, contest_id) VALUES ({0}, {1})'.format(i[1], ids_for_contests[i[0]]))
         ids_for_problems[i] = sqlite_cur.lastrowid
+    print('OK')
 
     import logging
+    print('WRITING SUBMITS...', end='')
     for i in list_for_submits:
         try:
             sqlite_cur.execute("INSERT INTO stats_submit (outcome, lang_id, problem_id, user_id) VALUES ('{0}', {1}, {2}, {3})".format(ejudge_status[i[3]], i[2], ids_for_problems[i[0], i[1]], ids_for_users[i[4]]))
         except KeyError:
             pass
             # logging('fuck the ' + i[3].__str__())
+    print('OK')
 
 
 
