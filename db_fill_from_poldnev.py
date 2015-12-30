@@ -25,6 +25,10 @@ user_id_convert = dict()
 season_to_id = dict()
 parallel_to_id = dict()
 
+cursor.execute("DELETE FROM stats_user")
+cursor.execute("DELETE FROM stats_participation")
+cursor.execute("DELETE FROM stats_season")
+cursor.execute("DELETE FROM stats_parallel")
 is_first = True
 for line in tsv:
     if is_first:
@@ -37,7 +41,7 @@ for line in tsv:
     poldnev_id = int(poldnev_id)
 
     if poldnev_id not in user_id_convert:
-        cursor.execute("INSERT INTO stats_user VALUES (NULL,?,?)", (first_name, last_name))
+        cursor.execute("INSERT INTO stats_user (first_name, last_name) VALUES (?,?)", (first_name, last_name))
         user_id_convert[poldnev_id] = cursor.lastrowid
     user_id = user_id_convert[poldnev_id]
 
@@ -57,17 +61,18 @@ for line in tsv:
             if p[0] in season_lower:
                 order = p[1]
                 break
-        cursor.execute("INSERT INTO stats_season VALUES (NULL,?,?,?)", (season, year, order))
+        cursor.execute("INSERT INTO stats_season (name, year, \"order\") VALUES (?,?,?)", (season, year, order))
         season_to_id[season] = cursor.lastrowid
     season_id = season_to_id[season]
 
     parallel = parallel.replace("+", "")
     if parallel not in parallel_to_id:
-        cursor.execute("INSERT INTO stats_parallel VALUES (NULL,?)", (parallel,))
+        cursor.execute("INSERT INTO stats_parallel (name) VALUES (?)", (parallel,))
         parallel_to_id[parallel] = cursor.lastrowid
     parallel_id = parallel_to_id[parallel]
 
-    cursor.execute("INSERT INTO stats_participation VALUES (NULL,?,?,?)", (parallel_id,season_id,user_id))
+    cursor.execute("INSERT INTO stats_participation (parallel_id, season_id, user_id) VALUES (?,?,?)",
+        (parallel_id,season_id,user_id))
 
 conn.commit()
 conn.close()
