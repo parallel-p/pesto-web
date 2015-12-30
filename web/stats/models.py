@@ -24,7 +24,7 @@ class User(models.Model):
         ordering = ['last_name', 'first_name']
     def __str__(self):
         return self.last_name + ' ' + self.first_name
-    user_id = models.IntegerField()
+    user_id = models.IntegerField(null=True)
 
 class Participation(models.Model):
     user = models.ForeignKey('User', null=True)
@@ -51,7 +51,7 @@ class Problem(models.Model):
     theme = models.ForeignKey('Theme', null=True)
     def __str__(self):
         return self.name
-    problem_id = models.IntegerField()
+    problem_id = models.IntegerField(null=True)
 
 class Language(models.Model):
     name = models.CharField(max_length=30)
@@ -82,13 +82,7 @@ class Submit(models.Model):
         ('RJ', 'Rejected'),
         ('SK', 'Skipped')))
     lang = models.ForeignKey('Language', null=True)
-    lang_id = models.CharField(max_length=30)
-    submit_id = models.IntegerField()
-
-class Contest:
-    name = models.CharField(max_length=30)
-    contest_id = models.IntegerField()
-    theme = models.ForeignKey('Theme', null=True)
+    submit_id = models.IntegerField(null=True)
 
 class Theme(models.Model):
     name = models.CharField(max_length=50)
