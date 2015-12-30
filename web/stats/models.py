@@ -43,14 +43,14 @@ class Contest(models.Model):
     class Meta:
         ordering = ['day']
     def __str__(self):
-        return self.name
+        return self.name or ''
     
 class Problem(models.Model):
     name = models.CharField(max_length=30, blank=True)
     contest = models.ForeignKey('Contest', null=True)
     theme = models.ForeignKey('Theme', null=True)
     def __str__(self):
-        return self.name
+        return self.name or ''
 
 class Language(models.Model):
     name = models.CharField(max_length=30)
