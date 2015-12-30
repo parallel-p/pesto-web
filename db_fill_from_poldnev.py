@@ -57,9 +57,9 @@ for line in tsv:
             ("подмосковье", 5),
             ("зима", 6)
         )
-        for p in name_to_order:
-            if p[0] in season_lower:
-                order = p[1]
+        for p_name, p_order in name_to_order:
+            if p_name in season_lower:
+                order = p_order
                 break
         cursor.execute("INSERT INTO stats_season (name, year, \"order\") VALUES (?,?,?)", (season, year, order))
         season_to_id[season] = cursor.lastrowid
