@@ -4,6 +4,7 @@ from django.db import models
 class User(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    user_id = models.IntegerField()
 
     @classmethod
     def create(self, first_name, last_name):
@@ -12,6 +13,7 @@ class User(models.Model):
 class Problem(models.Model):
     polygon_id = models.CharField(max_length=30)
     name = models.CharField(max_length=30)
+    problem_id = models.IntegerField()
 
     @classmethod
     def create(self, polygon_id, name):
@@ -22,9 +24,11 @@ class Submit(models.Model):
     outcome = models.CharField(max_length=30)
     user = models.ForeignKey('User')
     lang_id = models.CharField(max_length=30)
+    submit_id = models.IntegerField()
 
 class Contest:
     name = models.CharField(max_length=30)
+    contest_id = models.IntegerField()
 
     @classmethod
     def create(self, name):
