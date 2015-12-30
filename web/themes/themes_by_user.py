@@ -7,8 +7,11 @@ class PartResult:
     def __init__(self, part):
         self.part = part
         self.themes = []
-
-def themes_by_user(request, user_id):
+    def __repr__(self):
+        return 'PartResult("{}", {})'.format(self.part, str(self.themes))
+    
+    
+def themes_by_user(user_id):
     user = get_object_or_404(User, pk=user_id)
     parts = Participation.objects.filter(user=user).order_by('season')
     result = []

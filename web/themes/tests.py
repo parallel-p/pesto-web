@@ -28,8 +28,8 @@ class TestThemesByUser(TestCase):
         ur1.save()
         ur2.save()
         ur3.save()
-        res = themes_by_user(None, 1)
-        good = [['s1 p1', [['t2', 2], ['t1', 1]]], ['s2 p1', [['t1', 3]]]]
+        res = str(themes_by_user(1))
+        good = '[PartResult("s1 p1", [[\'t2\', 2], [\'t1\', 1]]), PartResult("s2 p1", [[\'t1\', 3]])]'
         self.assertEqual(res, good)
         
     def test_no_result(self):
@@ -53,6 +53,6 @@ class TestThemesByUser(TestCase):
         ur2 = UserResult(participation=part1, theme=t2, solved=2)
         ur1.save()
         ur2.save()
-        res = themes_by_user(None, 1)
-        good = [['s1 p1', [['t2', 2], ['t1', 1]]]]
+        res = str(themes_by_user(1))
+        good = '[PartResult("s1 p1", [[\'t2\', 2], [\'t1\', 1]])]'
         self.assertEqual(res, good)
