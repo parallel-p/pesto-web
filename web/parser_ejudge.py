@@ -11,7 +11,7 @@ class SQLiteConnector:
         self.connection.close()
 
 
-class MySQLConnector():
+class MySQLConnector:
     """Example of config
     config = {'user': 'root', 'passwd': '', 'host': 'localhost', 'port': 3306, 'db': 'ejudge_db'}
     """
@@ -57,7 +57,7 @@ def parse_ejudge(sqlite_dir, mysql_config):
     sqlite_cur = sqlite_db.get_cursor()
     print('OK\nREADING DATA...', end='')
 
-    mysql_cur.execute('SELECT contest_id, prob_id, lang_id, status, user_id FROM runs')
+    mysql_cur.execute('SELECT contest_id, prob_id, lang_id, status, user_id, run_id FROM runs')
     print('OK\nWRITING USERS...', end='')
 
     ids_for_problems = {}
@@ -95,9 +95,8 @@ def parse_ejudge(sqlite_dir, mysql_config):
     sqlite_cur.execute('DELETE FROM stats_submit')
     for i in list_for_submits:
         try:
-            sqlite_cur.execute("INSERT INTO stats_submit (outcome, lang_id, problem_id, user_id) VALUES ('{0}', {1}, {2}, {3})".format(ejudge_status[i[3]], i[2], ids_for_problems[i[0], i[1]], i[4]))
+            sqlite_cur.execute("INSERT INTO stats_submit (outcome, lang_id, problem_id, user_id, submit_id) VALUES ('{0}', {1}, {2}, {3}, {4})".format(ejudge_status[i[3]], i[2], ids_for_problems[i[0], i[1]], i[4], i[5]))
         except KeyError:
-            # print(("INSERT INTO stats_submit (outcome, lang_id, problem_id, user_id) VALUES ('{0}', {1}, {2}, {3})".format(ejudge_status[i[3]], i[2], ids_for_problems[i[0], i[1]], i[4])))
             pass
     print('OK')
 

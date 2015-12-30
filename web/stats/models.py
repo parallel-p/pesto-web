@@ -81,7 +81,7 @@ class Submit(models.Model):
         ('RJ', 'Rejected'),
         ('SK', 'Skipped')))
     lang = models.ForeignKey('Language', null=True)
-    # submit_id = models.IntegerField(null=True)
+    submit_id = models.IntegerField(null=True)
     user_id = models.IntegerField(null=True)
 
 class Theme(models.Model):
