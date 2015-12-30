@@ -15,9 +15,9 @@
         <h2>Статистики</h2>
         <div>
         <table class="stats"><tr>
-        {% for year,year_res in themes %}
-            <td><b>{{ year }}:</b> <table class="themes">
-            {% for theme, count in year_res %}
+        {% for year_res in themes %}
+            <td><b>{{ year_res.part }}:</b> <table class="themes">
+            {% for theme, count in year_res.themes %}
                 <tr><td>{{ theme }}</td><td>{{ count }}</td></tr>
             {% endfor %}
             </table></td>
