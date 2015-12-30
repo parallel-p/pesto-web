@@ -43,19 +43,19 @@ for line in tsv:
 
     if season not in season_to_id:
         year = int(season[:4])
-        order = year * 100
+        order = 0
         season_lower = season.lower()
         name_to_order = (
-            ("июль", 0),
-            ("август", 1),
-            ("зима", 7),
-            ("кострома", 0),
-            ("николаев", 1),
-            ("подмосковье", 2)
+            ("июль", 1),
+            ("август", 2),
+            ("кострома", 3),
+            ("николаев", 4),
+            ("подмосковье", 5),
+            ("зима", 6)
         )
         for p in name_to_order:
             if p[0] in season_lower:
-                order += p[1]
+                order = p[1]
                 break
         cursor.execute("INSERT INTO stats_season VALUES (NULL,?,?,?)", (season, year, order))
         season_to_id[season] = cursor.lastrowid

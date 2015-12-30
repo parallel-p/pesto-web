@@ -5,7 +5,7 @@ class Season(models.Model):
     year = models.IntegerField()
     order = models.IntegerField()
     class Meta:
-        ordering = ['order']
+        ordering = ['year', 'order']
         
     def __str__(self):
         return self.name
