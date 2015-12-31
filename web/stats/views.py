@@ -4,6 +4,7 @@ from .models import *
 from themes.themes_by_user import themes_by_user
 from .forms import AdminThemesForm
 from django import forms
+import tool_stat_themes_count
 
 def index(request):
     return HttpResponse("Sample text")
@@ -44,10 +45,8 @@ def admin_themes(request):
             contest = get_object_or_404(Contest, pk=int(field_name[len('theme_'):]))
             contest.theme = value
             contest.save()
-        if form.is_valid():
-            top_str = 'Данные о темах обновлены'
-        else:
-            top_str = 'Что-то пошло не так'
+        top_str = 'Данные о темах обновлены'
+        tool_stat_themes_count.main("db.sqlite3")
         return render(request, 'admin_themes.html', {'top_str': top_str})
 
     form = AdminThemesForm()
