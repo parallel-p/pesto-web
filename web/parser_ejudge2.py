@@ -54,9 +54,10 @@ def parse_ejudge2(sqlite_dir, mysql_config):
         sqlite_id_first_second.append(i)
     sqlite_cur = sqlite_db.get_cursor()
     sqlite_cur.execute('SELECT contest_id, parallel_id, season_id FROM stats_contest')
-    sqlite_contest_parallel_season = []
-    for i in sqlite_cur:
-        sqlite_contest_parallel_season.append(i)
+    sqlite_contest_parallel_season = {}
+    for contest, parallel, season in sqlite_cur:
+        if sqlite_contest_parallel_season.get(contest // 100 * 100, (None, None))[0] is None:
+            sqlite_contest_parallel_season[contest // 100 * 100] = (parallel, season)
     sqlite_cur.execute('SELECT id, parallel_id, season_id, user_id FROM stats_participation')
     sqlite_participation = []
     for i in sqlite_cur:
@@ -76,32 +77,33 @@ def parse_ejudge2(sqlite_dir, mysql_config):
     ids_in_ej = {}
     for id, first_name, last_name in sqlite_id_first_second:
         for user_id, contest_id, name in ejudge_usr_id_and_name_list:
-            if contest_id and name is not None and first_name in name and last_name in name and ',' not in name:
-                ids_in_ej[user_id] = id
-                #print(contest_id, user_id, ':', id, name, first_name, last_name)
-                #input()
-
-    p_and_s = {}
-    for user_id, parallel, season, no_fate in sqlite_participation:
-        p_and_s[user_id] = (parallel, season)
-    print(len(ids_in_ej))
+            try:
+                parallel = sqlite_contest_parallel_season[contest_id // 100 * 100][0]
+                season = sqlite_contest_parallel_season[contest_id // 100 * 100][1]
+            except KeyError:
+                continue
+            if name is None:
+                continue
+            name = ' ' + name + ' '
+            if (parallel, season, id) in participation_dict and (' ' + first_name + ' ') in name and (' ' + last_name + ' ') in name and ',' not in name:
+                ids_in_ej[(user_id, contest_id // 100 * 100)] = id
     print('OK\nWRITING SUBMITS SECOND...', end='')
-    c111 = c222 = c333 = c444 = 0
+    filled = 0
     for id, problem_id, ejudge_user_id, ejudge_contest_id in submits:
         try:
-            c111 += 1
-            user_id = ids_in_ej[ejudge_user_id, ejudge_contest_id]
-            c222 += 1
+            user_id = ids_in_ej[ejudge_user_id, ejudge_contest_id // 100 * 100]
             parallel, season = parallel_season_by_problem[problem_id]
-            c333 += 1
             participation = participation_dict[parallel, season, user_id]
-            c444 += 1
         except KeyError:
             continue
         sqlite_cur.execute('UPDATE stats_submit SET participation_id = {0} WHERE id={1}'.format(participation, id))
+        filled += 1
     print('OK')
-    print(c111, c222, c333, c444)
+    print(filled, 'filled')
     sqlite_db.connection.commit()
     sqlite_db.close_connection()
     mysql_db.close_connection()
 
+if __name__ == "__main__":
+    config = {'user': 'root', 'passwd': 'root', 'host': 'localhost', 'port': 3306, 'db': 'ejudgedata'}
+    parse_ejudge2('db.sqlite3', config)
