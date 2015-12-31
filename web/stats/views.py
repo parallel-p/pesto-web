@@ -33,7 +33,7 @@ def admin_themes(request):
     if request.method == 'POST':
         form = AdminThemesForm(request.POST)
         for field_name in form.data:
-            if len(field_name) < len('theme_') or field_name[:len('theme_')] != 'theme_':
+            if not field_name.startswith('theme_'):
                 continue
             value = form.data[field_name]
             if value == 'None':
