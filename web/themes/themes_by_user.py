@@ -27,6 +27,6 @@ def themes_by_user(user_id):
             continue
         cur_res = PartResult(str(part))
         for theme_res in part_res:
-            cur_res.themes.append([theme_res.theme.name, theme_res.solved, theme_res.total, solved_percent(theme_res)])
+            cur_res.themes.append([theme_res.theme.name, theme_res.solved, theme_res.total, solved_percent(theme_res) * 100])
         result.append(cur_res)
     return result
