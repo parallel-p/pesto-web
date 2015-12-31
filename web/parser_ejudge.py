@@ -105,3 +105,6 @@ def parse_ejudge(sqlite_dir, mysql_config):
     sqlite_db.close_connection()
     mysql_db.close_connection()
 
+if __name__ == "__main__":
+    config = {'user': 'root', 'passwd': 'root', 'host': 'localhost', 'port': 3306, 'db': 'ejudgedata'}
+    parse_ejudge('db.sqlite3', config)
