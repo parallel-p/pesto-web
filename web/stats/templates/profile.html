@@ -18,7 +18,10 @@
         {% for year_res in themes %}
             <td><b>{{ year_res.part }}:</b> <table class="themes">
             {% for theme, count, total, percent in year_res.themes %}
-                <tr><td>{{ theme }}</td><td>{{ count }}/{{ total }} ({{ percent }}%)</td></tr>
+                <tr>
+                    <td>{{ theme }}</td>
+                    <td>{{ count }}/{{ total }}<br> <progress max="{{ total }}" value="{{ count }}"></progress> </td>
+                </tr>
             {% endfor %}
             </table></td>
         {% endfor %}
