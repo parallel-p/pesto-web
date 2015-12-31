@@ -18,8 +18,10 @@ def main(database_file):
             solved.add((participation_id, problem_id))
     cursor.execute("SELECT stats_contest.season_id, stats_contest.parallel_id, stats_contest.theme_id , stats_problem.id FROM stats_problem JOIN stats_contest ON stats_problem.contest_id = stats_contest.id")
     total_dict = {}
+    themes = set()
     for season, parallel, theme, pid in cursor.fetchall():
         total_dict[season, parallel, theme] = total_dict.get((season, parallel, theme), 0) + 1
+        themes.add(theme)
     cursor.execute('SELECT id, season_id, parallel_id FROM stats_participation')
     part_dict = {}
     for id, season, parallel in cursor.fetchall():
@@ -39,7 +41,11 @@ def main(database_file):
         key = (participation_id, theme)
         if key[1] is not None:
             stats[key] = stats.get(key, 0) + 1
-
+    for part in part_dict:
+        season, parallel = part_dict[part]
+        for theme in themes:
+            if total_dict.get((season, parallel, theme)) and not stats.get((part, theme)):
+                stats[part, theme] = 0
     cursor.execute("DELETE FROM themes_userresult")
     for row in stats:
         if row[0] is None:
