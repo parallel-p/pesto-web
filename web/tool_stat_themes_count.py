@@ -11,7 +11,7 @@ def main(database_file):
 
     # (participation_id, problem_id)
     solved = set()
-    total = dict()
+    total = set()
 
     cursor.execute("SELECT problem_id, participation_id, outcome FROM stats_submit")
     for problem_id, participation_id, outcome in cursor.fetchall():
