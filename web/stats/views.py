@@ -28,6 +28,7 @@ def admin_themes(request):
         if len(parallels) == 0:
             continue
         seasons.append((season.name, parallels))
+    seasons.reverse()
 
     top_str = ""
     if request.method == 'POST':
@@ -36,9 +37,7 @@ def admin_themes(request):
             if not field_name.startswith('theme_'):
                 continue
             value = form.data[field_name]
-            if value == 'None':
-                value = None
-            elif value == 'Prev':
+            if value == 'Prev':
                 continue
             else:
                 value = get_object_or_404(Theme, pk=int(value))

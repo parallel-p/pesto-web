@@ -7,6 +7,7 @@
         {% if top_str == "" %}
             <form action="/admin/themes" method="post">
                 {% csrf_token %}
+                <input type="submit" value="Обновить темы">
                 {% for season_name, parallels in seasons %}
                     <h1>{{ season_name }}</h1>
                     {% for parallel_name, contests in parallels %}
@@ -17,7 +18,6 @@
                                     <td width="400">{{ contest.name }}</td>
                                     <td width="200"><select width="200" id="id_theme_{{contest.id}}" name="theme_{{contest.id}}">
                                         <option value="Prev" selected>Не менять ({{contest.theme.name}})</option>
-                                        <option value="None"></option>
                                         {% for theme in themes %}
                                             <option value="{{theme.id}}">{{theme.name}}</option>
                                         {% endfor %}
