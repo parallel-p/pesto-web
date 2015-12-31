@@ -19,10 +19,17 @@ def main(database_file):
 
     # stats[(participation_id, theme_id)] = solved
     stats = dict()
+    theme_cache = {}
     for participation_id, problem_id in solved:
-        cursor.execute("SELECT theme_id FROM stats_problem WHERE id=?", (problem_id,))
-        key = (participation_id, cursor.fetchone()[0])
-        stats[key] = stats.get(key, 0) + 1
+        if problem_id in theme_cache:
+            theme = theme_cache[problem_id]
+        else:
+            cursor.execute("SELECT stats_contest.theme_id FROM stats_problem JOIN stats_contest on stats_problem.contest_id = stats_contest.id WHERE stats_problem.id=?", (problem_id,))
+            theme = cursor.fetchone()[0]
+            theme_cache[problem_id] = theme
+        key = (participation_id, theme)
+        if key[1] is not None:
+            stats[key] = stats.get(key, 0) + 1
 
     cursor.execute("DELETE FROM themes_userresult")
     for row in stats:
