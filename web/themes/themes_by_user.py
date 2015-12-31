@@ -7,6 +7,9 @@ class PartResult:
     def __init__(self, part):
         self.part = part
         self.themes = []
+        self.solved = 0
+        self.total = 0
+        self.percent = 0
     def __repr__(self):
         return 'PartResult("{}", {})'.format(self.part, str(self.themes))
     
@@ -28,5 +31,8 @@ def themes_by_user(user_id):
         cur_res = PartResult(str(part))
         for theme_res in part_res:
             cur_res.themes.append([theme_res.theme.name, theme_res.solved, theme_res.total, solved_percent(theme_res)])
+            cur_res.solved += theme_res.solved
+            cur_res.total += theme_res.total
+        cur_res.percent = solved_percent(cur_res)  
         result.append(cur_res)
     return result

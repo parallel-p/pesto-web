@@ -17,6 +17,10 @@
         <table class="stats"><tr>
         {% for year_res in themes %}
             <td><b>{{ year_res.part }}:</b> <table class="themes">
+                <tr>
+                    <td><b>Всего</b></td>
+                    <td><b>{{ year_res.solved }}/{{ year_res.total }}</b><br> <progress max="{{ year_res.total }}" value="{{ year_res.solved }}"></progress> </td>
+                </tr>
             {% for theme, count, total, percent in year_res.themes %}
                 <tr>
                     <td>{{ theme }}</td>
