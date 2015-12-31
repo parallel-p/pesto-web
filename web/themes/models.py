@@ -6,3 +6,4 @@ class UserResult(models.Model):
     theme = models.ForeignKey('stats.Theme')
     participation = models.ForeignKey('stats.Participation', null=True)
     solved = models.IntegerField()
+    total = models.IntegerField(null=True)
