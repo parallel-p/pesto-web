@@ -11,19 +11,25 @@ def main(database_file):
 
     # (participation_id, problem_id)
     solved = set()
-    total = set()
 
     cursor.execute("SELECT problem_id, participation_id, outcome FROM stats_submit")
     for problem_id, participation_id, outcome in cursor.fetchall():
         if outcome in ("PD", "OK", "AC"):
             solved.add((participation_id, problem_id))
-        total.add((participation_id, problem_id))
+    cursor.execute("SELECT stats_contest.season_id, stats_contest.parallel_id, stats_contest.theme_id , stats_problem.id FROM stats_problem JOIN stats_contest ON stats_problem.contest_id = stats_contest.id")
+    total_dict = {}
+    for season, parallel, theme, pid in cursor.fetchall():
+        total_dict[season, parallel, theme] = total_dict.get((season, parallel, theme), 0) + 1
+    cursor.execute('SELECT id, season_id, parallel_id FROM stats_participation')
+    part_dict = {}
+    for id, season, parallel in cursor.fetchall():
+        part_dict[id] = (season, parallel)
 
     # stats[(participation_id, theme_id)] = solved
     stats = dict()
     stats_total = dict()
     theme_cache = {}
-    for participation_id, problem_id in total:
+    for participation_id, problem_id in solved:
         if problem_id in theme_cache:
             theme = theme_cache[problem_id]
         else:
@@ -32,16 +38,16 @@ def main(database_file):
             theme_cache[problem_id] = theme
         key = (participation_id, theme)
         if key[1] is not None:
-            stats_total[key] = stats_total.get(key, 0) + 1
-    for participation_id, problem_id in solved:
-        key = (participation_id, theme_cache[problem_id])
-        if key[1] is not None:
             stats[key] = stats.get(key, 0) + 1
 
     cursor.execute("DELETE FROM themes_userresult")
     for row in stats:
+        if row[0] is None:
+            continue
+        season, parallel = part_dict[row[0]]
+        total = total_dict[season, parallel, row[1]]
         cursor.execute("INSERT INTO themes_userresult (participation_id, theme_id, solved, total) VALUES (?,?,?,?)",
-            (row[0], row[1], stats[row], stats_total[row]))
+            (row[0], row[1], stats[row], total))
 
     conn.commit()
     conn.close()
