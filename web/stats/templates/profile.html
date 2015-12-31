@@ -17,8 +17,8 @@
         <table class="stats"><tr>
         {% for year_res in themes %}
             <td><b>{{ year_res.part }}:</b> <table class="themes">
-            {% for theme, count in year_res.themes %}
-                <tr><td>{{ theme }}</td><td>{{ count }}</td></tr>
+            {% for theme, count, total, percent in year_res.themes %}
+                <tr><td>{{ theme }}</td><td>{{ count }}/{{ total }} ({{ percent }}%)</td></tr>
             {% endfor %}
             </table></td>
         {% endfor %}

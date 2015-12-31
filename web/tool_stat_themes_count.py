@@ -11,16 +11,19 @@ def main(database_file):
 
     # (participation_id, problem_id)
     solved = set()
+    total = dict()
 
     cursor.execute("SELECT problem_id, participation_id, outcome FROM stats_submit")
     for problem_id, participation_id, outcome in cursor.fetchall():
         if outcome in ("PD", "OK", "AC"):
             solved.add((participation_id, problem_id))
+        total.add((participation_id, problem_id))
 
     # stats[(participation_id, theme_id)] = solved
     stats = dict()
+    stats_total = dict()
     theme_cache = {}
-    for participation_id, problem_id in solved:
+    for participation_id, problem_id in total:
         if problem_id in theme_cache:
             theme = theme_cache[problem_id]
         else:
@@ -29,12 +32,16 @@ def main(database_file):
             theme_cache[problem_id] = theme
         key = (participation_id, theme)
         if key[1] is not None:
+            stats_total[key] = stats.get(key, 0) + 1
+    for participation_id, problem_id in solved:
+        key = (participation_id, theme_cache[problem_id])
+        if key[1] is not None:
             stats[key] = stats.get(key, 0) + 1
 
     cursor.execute("DELETE FROM themes_userresult")
     for row in stats:
-        cursor.execute("INSERT INTO themes_userresult (participation_id, theme_id, solved) VALUES (?,?,?)",
-            (row[0], row[1], stats[row]))
+        cursor.execute("INSERT INTO themes_userresult (participation_id, theme_id, solved, total) VALUES (?,?,?,?)",
+            (row[0], row[1], stats[row], stats_total[row]))
 
     conn.commit()
     conn.close()
