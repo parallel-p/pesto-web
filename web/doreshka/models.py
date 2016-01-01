@@ -8,3 +8,5 @@ class DinnerTime(models.Model):
 class UserResult(models.Model):
     user = models.ForeignKey('stats.User')
     average_time = models.IntegerField()
+    class Meta:
+        ordering = ['-average_time']

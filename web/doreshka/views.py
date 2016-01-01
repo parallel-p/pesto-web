@@ -1,3 +1,5 @@
 from django.shortcuts import render
+from .doreshka_by_user import get_rating
 
-# Create your views here.
+def doreshka_rating(request):
+    return render(request, 'doreshka_rating.html', {'rating': get_rating()})
