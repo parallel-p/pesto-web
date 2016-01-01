@@ -7,7 +7,11 @@
     <body>
         <h1>{{user.first_name}} {{user.last_name}}</h1>
         <h2>Статистики</h2>
-        <p>Среднее время дорешки: {{ doreshka }}.</p>
+        {% if doreshka %}
+            <p>Среднее время дорешки: {{ doreshka }}.</p>
+        {% else %}
+            <p>Среднее время дорешки неизвестно.</p>
+        {% endif %}
         <div>
         <table class="stats"><tr>
         {% for year_res in themes %}
