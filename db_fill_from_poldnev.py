@@ -39,6 +39,8 @@ for line in tsv:
     except ValueError:
         continue
     poldnev_id = int(poldnev_id)
+    last_name = last_name.replace(chr(0x301), "")
+    first_name = first_name.replace(chr(0x301), "")
 
     if poldnev_id not in user_id_convert:
         cursor.execute("INSERT INTO stats_user (first_name, last_name) VALUES (?,?)", (first_name, last_name))
