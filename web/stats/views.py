@@ -5,6 +5,7 @@ from themes.themes_by_user import themes_by_user
 from .forms import AdminThemesForm
 from django import forms
 import tool_stat_themes_count
+from django.contrib.admin.views.decorators import staff_member_required
 
 def index(request):
     return HttpResponse("Sample text")
@@ -17,6 +18,7 @@ def users(request):
     users = User.objects.order_by('last_name', 'first_name')
     return render(request, 'users.html', {'users': users})
 
+@staff_member_required
 def admin_themes(request):
     seasons = []
     for season in Season.objects.all():
