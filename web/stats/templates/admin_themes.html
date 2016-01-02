@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>Редактирование тем - pesto-web</title>
+    </head>
+
+    <body>
+        {% if top_str == "" %}
+            <form action="/admin/themes" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Обновить темы">
+                {% for season_name, parallels in seasons %}
+                    <h1>{{ season_name }}</h1>
+                    {% for parallel_name, contests in parallels %}
+                        <h2>{{ season_name }}, {{ parallel_name }}</h2>
+                        <table border="1">
+                            {% for contest in contests %}
+                                <tr>
+                                    <td width="400">{{ contest.name }}</td>
+                                    <td width="200"><select width="200" id="id_theme_{{contest.id}}" name="theme_{{contest.id}}">
+                                        <option value="Prev" selected>Не менять ({{contest.theme.name}})</option>
+                                        {% for theme in themes %}
+                                            <option value="{{theme.id}}">{{theme.name}}</option>
+                                        {% endfor %}
+                                    </select></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endfor %}
+                {% endfor %}
+                <br><br>
+                <input type="submit" value="Обновить темы">
+            </form>
+        {% else %}
+            {{ top_str }}<br>
+            <a href="/admin/themes">Назад</a>
+        {% endif %}
+    </body>
+</html>
