@@ -11,6 +11,17 @@ table {
     border-collapse: collapse;
 }
 
+.blank
+{
+    background-color:transparent;
+    border: 0px;
+}
+
+.fullwidth
+{
+    width:100%;
+}
+
 .name_cell {
     height: 60px;
 }

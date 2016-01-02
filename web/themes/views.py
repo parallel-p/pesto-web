@@ -16,7 +16,8 @@ def compare(request, users):
     solved = [themes_by_user(user.id) for user in users]
     parts = [pr.part for pr in solved[0]]
     for ures in solved[1:]:
-        parts = [pr for pr in parts if pr in [cp.part for cp in ures]]  # participated by everyone
+        all_parts = [cp.part for cp in ures]
+        parts = [pr for pr in parts if pr in all_parts]  # participated by everyone
     
     result = []
     for part in parts:
