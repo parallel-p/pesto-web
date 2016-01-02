@@ -10,13 +10,32 @@
 
     <body>
         {% block body %}
+        <script>
+        function compare()
+        {
+            users = [];
+            cb = document.getElementsByTagName('input');
+            for(var elem=0;elem<cb.length;elem++)
+            {
+                if(cb[elem].checked)
+                {
+                    var id = cb[elem].id.slice(3);
+                    users.push(id);
+                }
+            }
+            users = users.join(',');
+            window.location = "/compare/" + users;
+        }
+        </script>
+        <input class="button" type="submit" style="position:fixed;right:5px;" value="Сравнить" onclick="compare();">
             <table align="center" border="1" width="500">
                 <tr class="name_title">
-                    <td><b><p>Фамилия, имя</p></b></td>
+                    <td><p><b>Фамилия, имя</b></p>
+                    </td>
                 </tr>
                 {% for user in users %}
                     <tr class="name_cell">
-                        <td ><p><a class="text" href="/user/{{ user.id }}">{{ user.last_name }} {{ user.first_name }}</a></p></td>
+                        <td ><p><input type="checkbox" id="sel{{ user.id }}"><a class="text" href="/user/{{ user.id }}">{{ user.last_name }} {{ user.first_name }}</a></p></td>
                     </tr>
                 {% endfor %}
             </table>
