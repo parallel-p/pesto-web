@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import *
 from themes.themes_by_user import themes_by_user
@@ -9,7 +9,7 @@ import tool_stat_themes_count
 from django.contrib.admin.views.decorators import staff_member_required
 
 def index(request):
-    return HttpResponse("Sample text")
+    return redirect('home')
 
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
