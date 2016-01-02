@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <title>Сравнение пользователей</title>
+        <link rel="stylesheet" href="/static/style.css">
+        <script src="https://www.google.com/jsapi"></script>
+        <script>google.load('visualization', '1', {packages: ['corechart', 'bar']});google.setOnLoadCallback(draw);
+        function draw()
+        {
+            var data = [
+            {% for year_res in result %}
+                ["{{ year_res.part }}",google.visualization.arrayToDataTable([
+                ["", 
+                 {% for user in users %}
+                 "{{ user }}",
+                 {% endfor %}
+                ], 
+                {% for user_res in year_res.result %}
+                ["{{ user_res.0.0 }}",
+                 {% for theme, count, total, percent in user_res %}
+                   {{ percent }},
+                 {% endfor %}
+                ],
+                {% endfor %}
+                ])],
+            {% endfor %}]
+            var options = {
+            focusTarget: 'category',
+             hAxis: {
+            textStyle: {
+                fontSize: 14,
+                bold: true,
+                italic: false
+            }
+            },
+            vAxis: {
+                title: '',
+                minValue: 0,
+                textStyle: {
+                    fontSize: 18,
+                    bold: false,
+                    italic: false
+                },
+                titleTextStyle: {
+                    fontSize: 18,
+                    color: '#67001f',
+                    bold: true,
+                    italic: false
+                }
+            }
+            };
+            for(var i in data)
+            {
+                var div = document.createElement('div');
+                document.body.appendChild(div);
+                var chart1 = new google.visualization.ColumnChart(div);
+                options.vAxis.title = data[i][0].replace('&#39;', "'");
+                chart1.draw(data[i][1], options);
+            }
+            
+        }
+        </script>
+    </head>
+
+    <body>
+    </body>
+</html>
