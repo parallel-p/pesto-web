@@ -1,25 +1,69 @@
-<!DOCTYPE html>
-
 {% extends "base.html" %}
 
-<html>
-    <head>
-        <link rel="stylesheet" href="static/style.css">
-        <title>Пользователи - pesto-web</title>
-    </head>
+{% block head %}
+    <title>Пользователи - pesto-web</title>
+{% endblock %}
 
-    <body>
-        {% block body %}
-            <table align="center" border="1" width="500">
-                <tr class="name_title">
-                    <td><b><p>Фамилия, имя</p></b></td>
+{% block body %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+    function updateCounter()
+    {
+        $('#selected').text('Выбрано: ' + selected);
+    }
+    function clearSelection()
+    {
+        $('input[type=checkbox]').attr('checked', false);
+        selected = 0;
+        updateCounter();
+    }
+    function compare()
+    {
+        if(selected < 2)
+        {
+            alert("Выберите хотя бы двух школьников");
+            return;
+        }
+        users = [];
+        $('input[type=checkbox]:checked').each(function(){
+            users.push(this.id.slice(3))
+        });
+        users = users.join(',');
+        window.location = "/compare/" + users;
+    }
+    selected = 0;
+    $(function(){
+        selected = $('input[type=checkbox]:checked').size();
+        updateCounter();
+        $('input[type=checkbox]').click(function(event){
+            selected += event.target.checked ? 1 : -1;
+            updateCounter();
+        });
+    });
+    </script>
+    <div style="position:fixed;right:5px;text-align:center;">
+    <span id="selected"></span><br>
+    
+    <table class="blank"><tr><td>
+    <div class="wrapper_button">
+    <button class="button fullwidth" type="submit" onclick="compare();">Сравнить</button><br>
+    </div>
+    </td></tr><tr><td>
+    <div class="wrapper_button">
+    <button class="button fullwidth" href="javascript:clearSelection()">Сброс</button>
+    </div>
+    </td></tr></table>
+    </div>
+        <table align="center" border="1" width="500">
+            <tr class="name_title">
+                <td><p><b>Фамилия, имя</b></p>
+                </td>
                 </tr>
-                {% for user in users %}
-                    <tr class="name_cell">
-                        <td ><p><a class="text" href="/user/{{ user.id }}">{{ user.last_name }} {{ user.first_name }}</a></p></td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% endblock %}
-    </body>
-</html>
+        {% for user in users %}
+            <tr class="name_cell">
+                <td ><p><input type="checkbox" id="sel{{ user.id }}"><a class="text" href="/user/{{ user.id }}">{{ user.last_name }} {{ user.first_name }}</a></p></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
