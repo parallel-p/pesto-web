@@ -1,5 +1,6 @@
 <html>
     <head>
+        <link rel="stylesheet" href="static/style.css">
         <title>{{user.first_name}} {{user.last_name}} - pesto-web</title>
         <link rel="stylesheet" href="/static/style.css">
     </head>
@@ -9,17 +10,19 @@
         <h2>Статистики</h2>
         <p>Среднее время дорешки: {{ doreshka }}.</p>
         <div>
-        <table class="stats"><tr>
+        <table border="1"><tr>
         {% for year_res in themes %}
-            <td><b>{{ year_res.part }}:</b> <table class="themes">
+            <td><b>{{ year_res.part }}:</b> <table>
                 <tr>
                     <td><b>Всего</b></td>
                     <td><b>{{ year_res.solved }}/{{ year_res.total }}</b><br> <progress max="{{ year_res.total }}" value="{{ year_res.solved }}"></progress> </td>
                 </tr>
             {% for theme, count, total, percent in year_res.themes %}
                 <tr>
+
                     <td>{{ theme }}</td>
                     <td>{{ count }}/{{ total }}<br> <progress max="{{ total }}" value="{{ count }}"></progress> </td>
+
                 </tr>
             {% endfor %}
             </table></td>
