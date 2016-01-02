@@ -6,23 +6,7 @@
         <script>google.load('visualization', '1', {packages: ['corechart', 'bar']});google.setOnLoadCallback(draw);
         function draw()
         {
-            var data = [
-            {% for year_res in result %}
-                ["{{ year_res.part }}",google.visualization.arrayToDataTable([
-                ["", 
-                 {% for user in users %}
-                 "{{ user }}",
-                 {% endfor %}
-                ], 
-                {% for user_res in year_res.result %}
-                ["{{ user_res.0.0 }}",
-                 {% for theme, count, total, percent in user_res %}
-                   {{ percent }},
-                 {% endfor %}
-                ],
-                {% endfor %}
-                ])],
-            {% endfor %}]
+            var data = {{ data|safe }};
             var options = {
             focusTarget: 'category',
              hAxis: {
@@ -54,7 +38,7 @@
                 var div = document.createElement('div');
                 document.body.appendChild(div);
                 var chart1 = new google.visualization.ColumnChart(div);
-                options.vAxis.title = data[i][0].replace('&#39;', "'");
+                options.vAxis.title = data[i][0];
                 chart1.draw(data[i][1], options);
             }
             

@@ -4,28 +4,11 @@ from .models import UserResult
 from stats.models import User
 from .themes_by_user import themes_by_user
 
-class CompareResult:
-    def __init__(self, result):
-        self.part = result[0].part
-        self.result = result
-
-class MultiPartResult:
-    def __init__(self, part_results):
-        self.part = part_results[0].part
-        self.themes = [theme[0] for theme in part_results[0].themes]
-        self.result = []
-        self.total = []
-        self.rowspan = len(self.themes) + 2
-        for cr in part_results:
-            self.total.append([cr.solved, cr.total, cr.percent])
-        for theme in range(len(self.themes)):
-            cres = []
-            for cr in part_results:
-                cres.append(cr.themes[theme])
-            self.result.append(cres)
-    
+class DataTable:
+    def __init__(self, arr):
+        self.arr = arr
     def __repr__(self):
-        return 'MultiPartResult({})'.format(self.result)
+        return 'google.visualization.arrayToDataTable({})'.format(str(self.arr))
 
 def compare(request, users):
     users = sorted(map(int, users.split(',')))
@@ -40,12 +23,13 @@ def compare(request, users):
         if part == 'Всего':
             continue
         user_results = []
+        themes = []
         for user in solved:
             for ures in user:
                 if ures.part == part:
-                    user_results.append(ures)
+                    user_results.append([res[3] for res in ures.themes])
+                    themes = [res[0] for res in ures.themes]
                     break
-        for ures in user_results:
-            ures.themes.sort(key=lambda x:x[0])
-        result.append(MultiPartResult(user_results)) 
-    return render(request, 'compare.html', {'users': users, 'result': result})
+        user_results = [[''] + list(map(str, users))] + list(map(list, zip(*([themes] + user_results))))
+        result.append([part, DataTable(user_results)]) 
+    return render(request, 'compare.html', {'data': str(result)})
