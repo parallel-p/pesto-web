@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 {% extends "base.html" %}
 
 {% block head %}
@@ -7,33 +5,50 @@
 {% endblock %}
 
 {% block body %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>
+    function updateCounter()
+    {
+        $('#selected').text('Выбрано: ' + selected);
+    }
     function compare()
     {
-        users = [];
-        cb = document.getElementsByTagName('input');
-        for(var elem=0;elem<cb.length;elem++)
+        if(selected < 2)
         {
-            if(cb[elem].checked)
-            {
-                var id = cb[elem].id.slice(3);
-                users.push(id);
-            }
+            alert("Выберите хотя бы двух школьников");
+            return;
         }
+        users = [];
+        $('input[type=checkbox]:checked').each(function(){
+            users.push(this.id.slice(3))
+        });
         users = users.join(',');
         window.location = "/compare/" + users;
     }
+    selected = 0;
+    $(function(){
+        selected = $('input[type=checkbox]:checked').size();
+        updateCounter();
+        $('input[type=checkbox]').click(function(event){
+            selected += event.target.checked ? 1 : -1;
+            updateCounter();
+        });
+    });
     </script>
-    <input class="button" type="submit" style="position:fixed;right:5px;" value="Сравнить" onclick="compare();">
+    <div style="position:fixed;right:5px;text-align:center;">
+    <input class="button" type="submit" value="Сравнить" onclick="compare();"><br>
+    <span id="selected"></span>
+    </div>
         <table align="center" border="1" width="500">
             <tr class="name_title">
                 <td><p><b>Фамилия, имя</b></p>
                 </td>
-            </tr>
-            {% for user in users %}
-                <tr class="name_cell">
-                    <td ><p><input type="checkbox" id="sel{{ user.id }}"><a class="text" href="/user/{{ user.id }}">{{ user.last_name }} {{ user.first_name }}</a></p></td>
                 </tr>
-            {% endfor %}
-        </table>
+        {% for user in users %}
+            <tr class="name_cell">
+                <td ><p><input type="checkbox" id="sel{{ user.id }}"><a class="text" href="/user/{{ user.id }}">{{ user.last_name }} {{ user.first_name }}</a></p></td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
