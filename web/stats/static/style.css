@@ -27,7 +27,7 @@ table p {
     position:fixed;
     right:0;
     bottom:0;
-    margin-bottom:0
+    margin-bottom:0;
 }
 
 .text {
@@ -65,7 +65,7 @@ table p {
     background: #deefff;
     border-radius: 10px;
     border: 1px solid #008;
-    font: 24px/1 Arial, sans-serif;
+    font: 24px Arial, sans-serif;
     color: #2c539e;
 }
 
