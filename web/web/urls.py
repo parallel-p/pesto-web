@@ -20,7 +20,7 @@ import stats.views
 
 urlpatterns = [
     url(r'^', include('stats.urls')),
-    url(r'^themes/', include('themes.urls')),
+    url(r'^', include('themes.urls')),
     url(r'^doreshka/', include('doreshka.urls')),
     url(r'^admin/themes', stats.views.admin_themes, name='admin_themes'),
     url(r'^admin/', admin.site.urls),

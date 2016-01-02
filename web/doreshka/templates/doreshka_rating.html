@@ -1,22 +1,22 @@
-<html>
-    <head>
-        <title>Рейтинг дорешки - pesto-web</title>
-    </head>
+{% extends "base.html" %}
 
-    <body>
-        <table border="1">
-            <tr>
-                <td width="20"><b>#</b></td>
-                <td width="400"><b>Фамилия, имя</b></td>
-                <td width="200"><b>Время дорешки</b></td>
+{% block head %}
+    <title>Рейтинг дорешки - pesto-web</title>
+{% endblock %}
+
+{% block body %}
+    <table align="center" border="1" width="500">
+            <tr class="name_title">
+                <td width="20"><p><b>#</b></p></td>
+                <td width="400"><p><b>Фамилия, имя</b></p></td>
+                <td width="200"><p><b>Время дорешки</b></p></td>
             </tr>
             {% for index, user, time in rating %}
-                <tr>
-                    <td width="20">{{ index }}</td>
-                    <td width="400"><a href="/user/{{ user.id }}">{{ user.last_name }} {{ user.first_name }}</a></td>
-                    <td width="200">{{ time }}</td>
+                <tr class="name_cell">
+                    <td width="20"><p>{{ index }}</p></td>
+                    <td width="400"><p><a href="/user/{{ user.id }}" class="text">{{ user.last_name }} {{ user.first_name }}</a></p></td>
+                    <td width="200"><p>{{ time }}<p></td>
                 </tr>
             {% endfor %}
         </table>
-    </body>
-</html>
+{% endblock %}

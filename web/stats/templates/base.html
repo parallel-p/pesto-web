@@ -2,15 +2,12 @@
 
 <html>
     <head>
-        <link rel="stylesheet" href="static/style.css">
-        <title>Pesto-web</title>
+        <link rel="stylesheet" href="/static/style.css">
         <meta charset="utf-8">
-        <style>
-
-        </style>
+        {% block head %}<title>Pesto-web</title>{% endblock %}
     </head>
     <body>
-        <p class="copyright"t>Room 2.2</p>
         {% block body %}{% endblock %}
+        <p class="copyright">Room 2.2</p>
     </body>
 </html>
