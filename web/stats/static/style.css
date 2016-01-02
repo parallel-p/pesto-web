@@ -1,3 +1,81 @@
-.stats td{vertical-align:top}
-.themes td{border:1px solid gray;padding:2px;}
-.themes{border-collapse:collapse} 
+body {
+    background: #c7b39b url(../static/background.jpg);
+    color: black;
+    background-attachment: fixed;
+}
+
+table {
+    background-color: #fff;
+    border-style: solid;
+    border: 1px thin solid;
+    border-collapse: collapse;
+}
+
+.name_cell {
+    height: 60px;
+}
+
+table p {
+    padding: 0 0 0 20px;
+}
+
+.name_title {
+    height: 30px;
+}
+
+.copyright {
+    position:fixed;
+    right:0;
+    bottom:0;
+    margin-bottom:0;
+}
+
+.text {
+    color: black;
+}
+
+.home {
+    text-align: center;
+    padding: 5px 20px 20px 20px;
+    font-size: 19pt;
+}
+
+.home_head {
+    text-align: center;
+    padding: 20px 0 0 0;
+    font-size: 35pt;
+}
+
+.wrapper {
+    padding: 50px 0 0 0;
+}
+
+.layer {
+    margin: auto;
+    width: 60%;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.button {
+    display: inline-block;
+    padding: 5px 20px;
+    text-decoration: none;
+    cursor: pointer;
+    background: #deefff;
+    border-radius: 10px;
+    border: 1px solid #008;
+    font: 24px Arial, sans-serif;
+    color: #2c539e;
+}
+
+.wrapper_button {
+    padding: 5px 0 0 0;
+}
+
+.layer_button {
+    margin: auto;
+    text-align: center;
+    width: 60%;
+    border-radius: 10px;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+{% extends "base.html" %}
+
+<html>
+    <body>
+        {% block body %}
+            <div class="wrapper">
+                <div class="layer">
+                    <p class="home_head">
+                        Pesto (web)
+                    </p>
+
+                    <p class="home">
+                        Добро пожаловать в Pesto-web. Pesto-web - это сайт для просмотра и подсчета статистик школьника.<br>
+                        Вы можете найти себя в закладке Users. Остальные разделы будут доработаны позже.<br>
+                        С новым годом!
+                    </p>
+                </div>
+            </div>
+            <div class="wrapper_button">
+                <div class="layer_button">
+                    <a href="/users" class="button">Пользователи</a>
+                    <a href="/doreshka/rating" class="button">Дорешка</a>
+                </div>
+            </div>
+        {% endblock %}
+
+    </body>
+
+</html>
