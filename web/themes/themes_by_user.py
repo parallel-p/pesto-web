@@ -68,8 +68,9 @@ def user_themes_chart(user_id):
             
     
     for part in solved:
-        part_result = [['', 'Решено', 'Не решено']]
+        part_result = [['', 'Решено задач', 'Не решено']]
         for theme, solved, total, percent in part.themes:
             part_result.append([theme, solved, total - solved])
         result.append([part.part, DataTable(part_result)]) 
+    result = result[-1:] + result[:-1]
     return str(result)
