@@ -5,6 +5,51 @@
 {% endblock %}
 
 {% block body %}
+    <script src="https://www.google.com/jsapi"></script>
+    <script>google.load('visualization', '1', {packages: ['corechart', 'bar']});google.setOnLoadCallback(draw);
+    function draw()
+    {
+        var data = {{ themes|safe }};
+        var options = {
+        focusTarget: 'category',
+        isStacked: true,
+         hAxis: {
+        textStyle: {
+            fontSize: 14,
+            bold: true,
+            italic: false
+        }
+        },
+        width: window.innerWidth - 30,
+     //   legend: { position: "none" },
+        vAxis: {
+            title: '',
+            minValue: 0,
+            textStyle: {
+                fontSize: 18,
+                bold: false,
+                italic: false
+            },
+            titleTextStyle: {
+                fontSize: 18,
+                color: '#67001f',
+                bold: true,
+                italic: false
+            }
+        }
+        };
+        owner = document.getElementById('themes');
+        for(var i in data)
+        {
+            var div = document.createElement('div');
+            owner.appendChild(div);
+            var chart1 = new google.visualization.ColumnChart(div);
+            options.vAxis.title = data[i][0];
+            chart1.draw(data[i][1], options);
+        }
+
+    }
+    </script>
     <h1>{{user.first_name}} {{user.last_name}}</h1>
     <h2>Статистики</h2>
     {% if doreshka %}
@@ -12,25 +57,7 @@
     {% else %}
         <p>Среднее время дорешки неизвестно.</p>
     {% endif %}
-    <div>
-    <table border="1"><tr>
-    {% for year_res in themes %}
-        <td><b>{{ year_res.part }}:</b> <table>
-            <tr>
-                <td><b>Всего</b></td>
-                <td><b>{{ year_res.solved }}/{{ year_res.total }}</b><br> <progress max="{{ year_res.total }}" value="{{ year_res.solved }}"></progress> </td>
-            </tr>
-        {% for theme, count, total, percent in year_res.themes %}
-            <tr>
-
-                <td>{{ theme }}</td>
-                <td>{{ count }}/{{ total }}<br> <progress max="{{ total }}" value="{{ count }}"></progress> </td>
-
-            </tr>
-        {% endfor %}
-        </table></td>
-    {% endfor %}
-    </tr></table>
+    <div id="themes">
     </div>
     <p>
     <font face="Comic Sans MS">HERE BE DRAGONS</font>
