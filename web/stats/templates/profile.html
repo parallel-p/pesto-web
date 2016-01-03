@@ -55,10 +55,10 @@
     <h1>{{user.first_name}} {{user.last_name}}</h1>
     {% if doreshka %}
         <p>Среднее время дорешки: {{ doreshka }}.</p>
+        <a href="/similar_users/{{ user.id }}" class="button">Похожие школьники</a><br><br>
     {% else %}
         <p>Среднее время дорешки неизвестно.</p>
     {% endif %}
-    <a href="/similar_users/{{ user.id }}" class="button">Похожие школьники</a><br><br>
     <div id="themes">
     </div>
     <p>
