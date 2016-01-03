@@ -115,3 +115,8 @@ table p {
     top:0;
     width: 10%;
 }
+
+#name_filter {
+    float:right;
+    margin-right:10px;
+}
