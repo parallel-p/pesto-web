@@ -2,6 +2,29 @@ import os.path
 import sqlite3
 import pymysql
 
+FIRST_NAME_CONVERT = {
+    "Наталья": " Наталия ",
+    "Наталия": " Наталья ",
+    "Евгений": " Женя ",
+    "Екатерина": " Катя ",
+    "Сергей": " Сережа ",
+    "Анна": " Аня ",
+    "Елена": " Лена ",
+    "Юлия": " Юля ",
+    "Иван": " Ваня ",
+    "Константин": " Костя ",
+    "Михаил": " Миша ",
+    "Владислав": " Влад ",
+    "Роман": " Рома ",
+    "Даниил": " Данил ",
+    "Данил": " Даня ",
+    "Мария": " Марья ",
+    "Марья": " Мария ",
+    "Григорий": " Гриша ",
+    "Александр": " Саша ",
+    "Дмитрий": " Дима "
+}
+
 class SQLiteConnector:
     def __init__(self, db_dir):
         self.connection = sqlite3.connect(db_dir)
@@ -62,7 +85,19 @@ def parse_ejudge2(sqlite_dir, mysql_config):
 
     print('OK\nWRITING SUBMITS...', end='')
     ids_in_ej = {}
+    num = 0
     for id, first_name, last_name in sqlite_id_first_second:
+        first_name_rp = (' ' + first_name + ' ').replace("Ё", "Е").replace("ё", "е")
+        last_name_rp = (' ' + last_name + ' ').replace("Ё", "Е").replace("ё", "е")
+        if first_name in FIRST_NAME_CONVERT:
+            first_name_1 = FIRST_NAME_CONVERT[first_name]
+            first_name_1_rp = (' ' + first_name_1 + ' ').replace("Ё", "Е").replace("ё", "е")
+        else:
+            first_name_1 = None
+            first_name_1_rp = None
+        last_name_1_rp = None
+        if "(" in last_name:
+            last_name_rp, last_name_1_rp = last_name_rp.replace("(", " ").replace(")", " ").split()[:2]
         for user_id, contest_id, name in ejudge_usr_id_and_name_list:
             try:
                 parallel = sqlite_contest_parallel_season[contest_id // 100 * 100][0]
@@ -71,9 +106,15 @@ def parse_ejudge2(sqlite_dir, mysql_config):
                 continue
             if name is None:
                 continue
-            name = ' ' + name + ' '
-            if (parallel, season, id) in participation_dict and (' ' + first_name + ' ') in name and (' ' + last_name + ' ') in name and ',' not in name:
+            new_name = (' ' + name + ' ').replace("Ё", "Е").replace("ё", "е")
+            if (parallel, season, id) in participation_dict and \
+               ',' not in name and \
+               (first_name_rp in new_name or (first_name_1_rp is not None and first_name_1_rp in new_name)) and \
+               (last_name_rp in new_name or (last_name_1_rp is not None and last_name_1_rp in new_name)):
                 ids_in_ej[(user_id, contest_id // 100 * 100)] = id
+        num += 1
+        if num % 10 == 0:
+            print(num, "/", len(sqlite_id_first_second))
     for id, problem_id, ejudge_user_id, ejudge_contest_id in submits:
         try:
             user_id = ids_in_ej[ejudge_user_id, ejudge_contest_id // 100 * 100]
@@ -84,9 +125,10 @@ def parse_ejudge2(sqlite_dir, mysql_config):
         sqlite_cur.execute('UPDATE stats_submit SET participation_id={0} WHERE id={1}'.format(participation, id))
 
     print('OK')
+
     sqlite_db.close_connection()
     mysql_db.close_connection()
 
 if __name__ == "__main__":
-    config = {'user': 'root', 'passwd': 'root', 'host': 'localhost', 'port': 3306, 'db': 'ejudgedata'}
+    config = {'user': 'root', 'passwd': '5382JOihyt', 'host': '192.168.2.13', 'port': 3306, 'db': 'ejudgedata'}
     parse_ejudge2('db.sqlite3', config)
