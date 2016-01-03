@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^user/(?P<user_id>[0-9]+)/$', views.profile, name='profile'),
     # ex: /similar_users/1
     url(r'^similar_users/(?P<user_id>[0-9]+)/$', views.similar_users, name='similar_users'),
+    url(r'^home$', views.home, name='home'),
 ]
