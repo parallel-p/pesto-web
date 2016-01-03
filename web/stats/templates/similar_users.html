@@ -1,18 +1,21 @@
-<html>
-    <head>
-        <title>{{ user.first_name }} {{ user.last_name }} - похожие - pesto-web</title>
-    </head>
+{% extends "base.html" %}
 
-    <body>
-        <table border="1" width="500">
-            <tr>
-                <td><b>Фамилия, имя</b></td>
-            </tr>
-            {% for user in users %}
-                <tr>
-                    <td><a href="/user/{{ user.id }}">{{ user.last_name }} {{ user.first_name }}</a></td>
+{% block head %}
+    <title>{{ user.first_name }} {{ user.last_name }} - похожие - pesto-web</title>
+{% endblock %}
+
+{% block body %}
+    <a href="/home" class="logo"><img src="/static/logo2.jpg" class="logo_img"></a>
+        <center><h1>{{ user.first_name }} {{ user.last_name }}: похожие школьники</h1></center>
+        <table align="center" border="1" width="500">
+            <tr class="name_title">
+                <td><p><b>Фамилия, имя</b></p>
+                </td>
                 </tr>
-            {% endfor %}
-        </table>
-    </body>
-</html>
+        {% for user in users %}
+            <tr class="name_cell">
+                <td><p><a class="text" href="/user/{{ user.id }}">{{ user.last_name }} {{ user.first_name }}</a></p></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
