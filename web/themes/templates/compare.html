@@ -43,6 +43,12 @@
             options.vAxis.title = data[i][0];
             chart1.draw(data[i][1], options);
         }
+        if(!data.length)
+        {
+            var p = document.createElement('p');
+            p.innerHTML = "Выбранные школьники не были вместе ни в одной параллели.";
+            document.body.appendChild(p);
+        }
 
     }
     </script>
