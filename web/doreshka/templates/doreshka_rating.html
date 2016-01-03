@@ -5,19 +5,56 @@
 {% endblock %}
 
 {% block body %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/static/jquery.tablesorter.min.js"></script>
+    <script>
+        $(function(){
+            $.tablesorter.addWidget({
+                id: "indexFirstColumn",
+                format: function(table) {
+                    for (var i = 0; i < table.tBodies[0].rows.length; i++) {
+                        $("tbody tr:eq(" + i + ") td:first", table).html('<p>' + (i + 1) + '</p>');
+                    }
+                }
+            }),
+            $('#rating').tablesorter({
+                widgets: ['zebra','indexFirstColumn'],
+                headers: {0: {sorter: false}},
+                headerTemplate: '{content}{icon}',
+                onRenderTemplate: null, // function(index, template){ return template; },
+                onRenderHeader: function (index) {
+                    $(this).find('div.tablesorter-header-inner').addClass('roundedCorners');
+                },
+                cancelSelection: true,
+                tabIndex: true,
+                usNumberFormat: true,
+                resort: true,
+                ignoreCase: true,
+            });
+        });
+    </script>
+
     <div class="logo"><a href="/home"><img src="/static/logo2.jpg" class="logo_img"></a></div>
-    <table align="center" border="1" width="500">
+    <table id="rating" align="center" border="1">
+        <thead>
             <tr class="name_title">
-                <td width="20"><p><b>#</b></p></td>
-                <td width="400"><p><b>Фамилия, имя</b></p></td>
-                <td width="200"><p><b>Время дорешки</b></p></td>
+                <td width="20"><div class="center_text"><b>#</b></div></td>
+                <td width="200"><p class="table_header_blue"><b>Фамилия, имя</b></p></td>
+                <td width="200"><div class="center_text table_header_blue"><b>Время дорешки</b></div></td>
+                <td width="200"><div class="center_text table_header_blue"><b>Rejected submits</b></div></td>
+                <td width="200"><div class="center_text table_header_blue"><b>Сдано с первой попытки</b></div></td>
             </tr>
-            {% for index, user, time in rating %}
+        </thead>
+        <tbody>
+            {% for index, user, time, rj, pf in rating %}
                 <tr class="name_cell">
-                    <td width="20"><p>{{ index }}</p></td>
-                    <td width="400"><p><a href="/user/{{ user.id }}" class="text">{{ user.last_name }} {{ user.first_name }}</a></p></td>
-                    <td width="200"><p>{{ time }}<p></td>
+                    <td width="20"><div class="center_text">{{ index }}</div></td>
+                    <td width="200"><p><a href="/user/{{ user.id }}" class="text">{{ user.last_name }} {{ user.first_name }}</a></p></td>
+                    <td width="200"><div class="center_text">{{ time }}</div></td>
+                    <td width="200"><div class="center_text">{{ rj }}</div></td>
+                    <td width="200"><div class="center_text">{{ pf }}</div></td>
                 </tr>
             {% endfor %}
+        </tbody>
         </table>
 {% endblock %}
