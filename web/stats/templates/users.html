@@ -42,6 +42,7 @@
             updateCounter();
         });
         $name_cell = $('.name_cell');
+        $('#name_filter').val('');
         $('#name_filter').on('input',function(event){
             var txt = $('#name_filter').val().toUpperCase();
             $name_cell.each(function(){
