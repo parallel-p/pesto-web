@@ -49,7 +49,6 @@
             options.vAxis.title = data[i][0];
             chart1.draw(data[i][1], options);
         }
-
     }
     </script>
     <h1>{{user.first_name}} {{user.last_name}}</h1>
@@ -58,7 +57,9 @@
     {% else %}
         <p>Среднее время дорешки неизвестно.</p>
     {% endif %}
-    <a href="/similar_users/{{ user.id }}" class="button">Похожие школьники</a><br><br>
+    <p>Rejected submits: {{ rejected }}.</p>
+    <p>Сдано с первой попытки: {{ perfect }}.</p>
+    <p><a href="/similar_users/{{ user.id }}" class="button">Похожие школьники</a></p>
     <div id="themes">
     </div>
     <p>

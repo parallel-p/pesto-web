@@ -120,3 +120,16 @@ table p {
     float:right;
     margin-right:10px;
 }
+
+.center_text {
+    text-align: center;
+}
+
+.table_header_blue {
+    color: blue;
+   }
+
+.table_header_blue:hover {
+    color: red;
+    text-decoration: underline;
+}
