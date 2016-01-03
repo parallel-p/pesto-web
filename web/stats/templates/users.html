@@ -41,6 +41,14 @@
             selected += event.target.checked ? 1 : -1;
             updateCounter();
         });
+        $name_cell = $('.name_cell');
+        $('#name_filter').val('');
+        $('#name_filter').on('input',function(event){
+            var txt = $('#name_filter').val().toUpperCase();
+            $name_cell.each(function(){
+                this.style.display = (this.innerHTML.toUpperCase().search(txt) >= 0)?'table-row':'none';
+            });
+        });
     });
     </script>
     <div style="position:fixed;right:5px;text-align:center;">
@@ -58,7 +66,7 @@
     </div>
         <table align="center" border="1" width="500">
             <tr class="name_title">
-                <td><p><b>Фамилия, имя</b></p>
+                <td><p><b>Фамилия, имя</b><input id="name_filter" autofocus></p>
                 </td>
                 </tr>
         {% for user in users %}
