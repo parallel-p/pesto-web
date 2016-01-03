@@ -20,6 +20,24 @@ def doreshka_by_user_seconds(user_id):
     
     return ures.average_time
 
+def rejected_by_user(user_id):
+    user = get_object_or_404(User, pk=user_id)
+    try:
+        ures = UserResult.objects.filter(user=user)[0]
+    except IndexError:
+        return 0
+
+    return ures.rj
+
+def perfect_by_user(user_id):
+    user = get_object_or_404(User, pk=user_id)
+    try:
+        ures = UserResult.objects.filter(user=user)[0]
+    except IndexError:
+        return 0
+
+    return ures.pf
+
 def get_time_str(time):
     hr, mn = time // 3600, time // 60 % 60
     hr = choose_form(hr, 'час', 'часа', 'часов')
@@ -36,6 +54,6 @@ def get_rating():
     results = UserResult.objects.all()
     rating = []
     for num, result in enumerate(results):
-        rating.append((num + 1, result.user, get_time_str(result.average_time)))
+        rating.append((num + 1, result.user, get_time_str(result.average_time), result.rj, result.pf))
     return rating
 
