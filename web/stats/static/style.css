@@ -1,3 +1,117 @@
-.stats td{vertical-align:top}
-.themes td{border:1px solid gray;padding:2px;}
-.themes{border-collapse:collapse} 
+body {
+    background: #c7b39b url(../static/background.jpg);
+    color: black;
+    background-attachment: fixed;
+}
+
+table {
+    background-color: #fff;
+    border-style: solid;
+    border: 1px thin solid;
+    border-collapse: collapse;
+}
+
+.blank
+{
+    background-color:transparent;
+    border: 0px;
+}
+
+.fullwidth
+{
+    width:100%;
+}
+
+.name_cell {
+    height: 60px;
+}
+
+table p {
+    padding: 0 0 0 20px;
+}
+
+.name_title {
+    height: 30px;
+}
+
+.copyright {
+    position:fixed;
+    right:0;
+    bottom:0;
+    margin-bottom:0;
+}
+
+.text {
+    color: black;
+}
+
+.home {
+    text-align: center;
+    padding: 15px 20px 20px 20px;
+    font-size: 19pt;
+    margin-top:50px;
+}
+
+.home_head {
+    text-align: center;
+    padding: 20px 0 0 0;
+    font-size: 35pt;
+}
+
+.wrapper {
+    padding: 50px 0 0 0;
+}
+
+.layer {
+    margin: auto;
+    width: 60%;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.button {
+    display: inline-block;
+    padding: 5px 20px;
+    text-decoration: none;
+    cursor: pointer;
+    background: #deefff;
+    border-radius: 10px;
+    border: 1px solid #008;
+    font: 24px Arial, sans-serif;
+    color: #2c539e;
+}
+
+.wrapper_button {
+    padding: 5px 0 0 0;
+}
+
+.layer_button {
+    margin: auto;
+    text-align: center;
+    width: 60%;
+    border-radius: 10px;
+}
+
+.logo_img {
+    border-radius: 10px;
+    display: block;
+}
+
+.logo_img2 {
+    border-radius: 10px;
+    display: block;
+}
+
+.logo {
+    padding: 105px 0 0 45px;
+    position:absolute;
+    left:0;
+    top:0;
+}
+
+.logo2 {
+    padding: 105px 0 0 45px;
+    left:0;
+    top:0;
+    width: 10%;
+}

@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import *
-from themes.themes_by_user import themes_by_user
+from themes.themes_by_user import user_themes_chart
 from doreshka.doreshka_by_user import doreshka_by_user_str
 from .forms import AdminThemesForm
 from django import forms
@@ -9,17 +9,20 @@ import tool_stat_themes_count
 from django.contrib.admin.views.decorators import staff_member_required
 
 def index(request):
-    return HttpResponse("Sample text")
+    return redirect('home')
 
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     return render(request, 'profile.html', {'user': user,
-                                            'themes': themes_by_user(user_id),
+                                            'themes': user_themes_chart(user_id),
                                             'doreshka': doreshka_by_user_str(user_id)})
 
 def users(request):
     users = User.objects.order_by('last_name', 'first_name')
     return render(request, 'users.html', {'users': users})
+
+def home(request):
+    return render(request, 'home.html')
 
 @staff_member_required
 def admin_themes(request):

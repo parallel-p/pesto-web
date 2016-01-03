@@ -1,20 +1,16 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <title>{{user.first_name}} {{user.last_name}} - pesto-web</title>
-{% endblock %}
-
-{% block body %}
     <div class="logo2"><a href="/home"><img src="/static/logo2.jpg" class="logo_img2"></a></div>
 
+    <title>Сравнение пользователей</title>
     <script src="https://www.google.com/jsapi"></script>
     <script>google.load('visualization', '1', {packages: ['corechart', 'bar']});google.setOnLoadCallback(draw);
     function draw()
     {
-        var data = {{ themes|safe }};
+        var data = {{ data|safe }};
         var options = {
         focusTarget: 'category',
-        isStacked: true,
          hAxis: {
         textStyle: {
             fontSize: 14,
@@ -22,11 +18,10 @@
             italic: false
         }
         },
-        width: window.innerWidth - 30,
-     //   legend: { position: "none" },
         vAxis: {
             title: '',
             minValue: 0,
+            maxValue: 100,
             textStyle: {
                 fontSize: 18,
                 bold: false,
@@ -40,25 +35,21 @@
             }
         }
         };
-        owner = document.getElementById('themes');
         for(var i in data)
         {
             var div = document.createElement('div');
-            owner.appendChild(div);
+            document.body.appendChild(div);
             var chart1 = new google.visualization.ColumnChart(div);
             options.vAxis.title = data[i][0];
             chart1.draw(data[i][1], options);
         }
+        if(!data.length)
+        {
+            var p = document.createElement('p');
+            p.innerHTML = "Выбранные школьники не были вместе ни в одной параллели.";
+            document.body.appendChild(p);
+        }
 
     }
     </script>
-    <h1>{{user.first_name}} {{user.last_name}}</h1>
-    {% if doreshka %}
-        <p>Среднее время дорешки: {{ doreshka }}.</p>
-    {% else %}
-        <p>Среднее время дорешки неизвестно.</p>
-    {% endif %}
-    <div id="themes">
-    </div>
-    <p>
 {% endblock %}

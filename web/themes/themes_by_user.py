@@ -13,6 +13,12 @@ class PartResult:
     def __repr__(self):
         return 'PartResult("{}", {})'.format(self.part, str(self.themes))
     
+class DataTable:
+    def __init__(self, arr):
+        self.arr = arr
+    def __repr__(self):
+        return 'google.visualization.arrayToDataTable({})'.format(str(self.arr))
+    
 def solved_percent(res):
     if res.total:
         return res.solved * 100 // res.total
@@ -54,3 +60,17 @@ def themes_by_user(user_id):
     result.append(total_res)
 
     return result
+
+def user_themes_chart(user_id):
+    user = get_object_or_404(User, pk=user_id)
+    solved = themes_by_user(user.id)
+    result = []
+            
+    
+    for part in solved:
+        part_result = [['', 'Решено задач', 'Не решено']]
+        for theme, solved, total, percent in part.themes:
+            part_result.append([theme, solved, total - solved])
+        result.append([part.part, DataTable(part_result)]) 
+    result = result[-1:] + result[:-1]
+    return str(result)
