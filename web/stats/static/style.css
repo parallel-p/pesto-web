@@ -47,8 +47,9 @@ table p {
 
 .home {
     text-align: center;
-    padding: 5px 20px 20px 20px;
+    padding: 15px 20px 20px 20px;
     font-size: 19pt;
+    margin-top:50px;
 }
 
 .home_head {
