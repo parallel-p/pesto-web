@@ -73,4 +73,8 @@ def user_themes_chart(user_id):
             part_result.append([theme, solved, total - solved])
         result.append([part.part, DataTable(part_result)]) 
     result = result[-1:] + result[:-1]
+    if len(result) == 1:
+        return '[]'
+    if len(result) == 2:
+        result = [result[1]]
     return str(result)
