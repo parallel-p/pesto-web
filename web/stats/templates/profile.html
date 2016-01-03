@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <a href="/home" class="logo2"><img src="/static/logo2.jpg" class="logo_img2"></a>
+    <div class="logo2"><a href="/home"><img src="/static/logo2.jpg" class="logo_img2"></a></div>
 
     <script src="https://www.google.com/jsapi"></script>
     <script>google.load('visualization', '1', {packages: ['corechart', 'bar']});google.setOnLoadCallback(draw);
@@ -58,6 +58,7 @@
     {% else %}
         <p>Среднее время дорешки неизвестно.</p>
     {% endif %}
+    <a href="/similar_users/{{ user.id }}" class="button">Похожие школьники</a><br><br>
     <div id="themes">
     </div>
     <p>

@@ -7,6 +7,7 @@ from .forms import AdminThemesForm
 from django import forms
 import tool_stat_themes_count
 from django.contrib.admin.views.decorators import staff_member_required
+from .get_similar_users import get_similar_users
 
 def index(request):
     return redirect('home')
@@ -62,3 +63,8 @@ def admin_themes(request):
                                                  'seasons': seasons,
                                                  'form': form,
                                                  'themes': Theme.objects.all()})
+
+
+def similar_users(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    return render(request, 'similar_users.html', {'first_user': user, 'similar_users': get_similar_users(user)})
