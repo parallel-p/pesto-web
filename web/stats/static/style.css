@@ -94,26 +94,23 @@ table p {
 .logo_img {
     border-radius: 10px;
     display: block;
-    max-width: 30%;
-    max-height: 30%;
 }
 
 .logo_img2 {
     border-radius: 10px;
     display: block;
-    max-width: 10%;
-    max-height: 10%;
 }
 
 .logo {
-    padding: 105px 45px;
+    padding: 105px 0 0 45px;
     position:absolute;
     left:0;
     top:0;
 }
 
 .logo2 {
-    padding: 105px 45px;
+    padding: 105px 0 0 45px;
     left:0;
     top:0;
+    width: 10%;
 }
