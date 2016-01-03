@@ -90,3 +90,30 @@ table p {
     width: 60%;
     border-radius: 10px;
 }
+
+.logo_img {
+    border-radius: 10px;
+    display: block;
+    max-width: 50%;
+    max-height: 50%;
+}
+
+.logo_img2 {
+    border-radius: 10px;
+    display: block;
+    max-width: 10%;
+    max-height: 10%;
+}
+
+.logo {
+    padding: 105px 45px;
+    position:absolute;
+    left:0;
+    top:0;
+}
+
+.logo2 {
+    padding: 105px 45px;
+    left:0;
+    top:0;
+}
