@@ -56,3 +56,9 @@ def admin_themes(request):
                                                  'seasons': seasons,
                                                  'form': form,
                                                  'themes': Theme.objects.all()})
+
+
+def similar_users(request, user_id):
+    users = User.objects.order_by('last_name', 'first_name')
+    user = get_object_or_404(User, pk=user_id)
+    return render(request, 'similar_users.html', {'user': user, 'users': users})
