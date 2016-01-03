@@ -28,9 +28,12 @@ def compare(request, users):
         for user in solved:
             for ures in user:
                 if ures.part == part:
+                    ures.themes.sort()
                     user_results.append([res[3] for res in ures.themes])
                     themes = [res[0] for res in ures.themes]
                     break
-        user_results = [[''] + list(map(str, users))] + list(map(list, zip(*([themes] + user_results))))
+        user_results = list(map(list, zip(*([themes] + user_results))))
+        user_results.sort(key=lambda x:-x[1])
+        user_results = [[''] + list(map(str, users))] + user_results
         result.append([part, DataTable(user_results)]) 
     return render(request, 'compare.html', {'data': str(result)})
