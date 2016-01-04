@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, render_to_response
 from django.http import HttpResponse
 from .models import *
 from themes.themes_by_user import user_themes_chart
@@ -8,6 +8,7 @@ from django import forms
 import tool_stat_themes_count
 from django.contrib.admin.views.decorators import staff_member_required
 from .get_similar_users import get_similar_users
+from django.template import RequestContext
 
 def index(request):
     return redirect('home')
@@ -70,3 +71,23 @@ def admin_themes(request):
 def similar_users(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     return render(request, 'similar_users.html', {'first_user': user, 'similar_users': get_similar_users(user)})
+
+def page_not_found(request):
+    response = render_to_response('error.html', {'error_code': '404'}, context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+def bad_request(request):
+    response = render_to_response('error.html', {'error_code': '400'}, context_instance=RequestContext(request))
+    response.status_code = 400
+    return response
+
+def permission_denied(request):
+    response = render_to_response('error.html', {'error_code': '403'}, context_instance=RequestContext(request))
+    response.status_code = 403
+    return response
+
+def server_error(request):
+    response = render_to_response('error.html', {'error_code': '500'}, context_instance=RequestContext(request))
+    response.status_code = 500
+    return response
