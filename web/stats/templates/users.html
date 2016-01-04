@@ -9,6 +9,29 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>
+    enru_array = ['qй', 'wц', 'eу', 'rк', 'tе', 'yн', 'uг', 'iш', 'oщ', 'pз', '[х', ']ъ', 'aф', 'sы', 'dв', 'fа', 'gп', 'hр', 'jо', 'kл', 'lд', ';ж', '\'э', 'zя', 'xч', 'cс', 'vм', 'bи', 'nт', 'mь', ',б', '.ю']
+    function transformEnRu(str)
+    {
+        res = '';
+        for(var ch in str)
+        {
+            var added = 0;
+            for(var en in enru_array)
+            {
+                if(str[ch] == enru_array[en][0])
+                {
+                    res += enru_array[en][1];
+                    added = 1;
+                    break;
+                }
+            }
+            if(!added)
+            {
+                res += str[ch];
+            }
+        }
+        return res;
+    }
     function updateCounter()
     {
         $('#selected').text('Выбрано: ' + selected);
@@ -44,9 +67,11 @@
         $name_cell = $('.name_cell');
         $('#name_filter').val('');
         $('#name_filter').on('input',function(event){
-            var txt = $('#name_filter').val().toUpperCase();
+            var txt = $('#name_filter').val().toLowerCase();
+            txt = [txt, transformEnRu(txt)]
             $name_cell.each(function(){
-                this.style.display = (this.innerHTML.toUpperCase().search(txt) >= 0)?'table-row':'none';
+                var cur_txt = this.innerHTML.toLowerCase();
+                this.style.display = (cur_txt.search(txt[0]) >= 0 || cur_txt.search(txt[1]) >= 0)?'table-row':'none';
             });
         });
     });
