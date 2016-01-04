@@ -40,6 +40,12 @@ table p {
     bottom:0;
     margin-bottom:0;
 }
+.counter {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    margin-bottom: 0;
+}
 
 .text {
     color: black;
