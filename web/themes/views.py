@@ -23,16 +23,28 @@ def compare(request, users):
     for parallel in parallels:
         if parallel == 'Всего':
             continue
-        user_results = []
-        themes = []
+
+        themes = set()
         for user in solved:
             for ures in user:
                 if ures.parallel == parallel:
-                    ures.themes.sort()
-                    user_results.append([res[3] for res in ures.themes])
-                    themes = [res[0] for res in ures.themes]
+                    themes |= {res[0] for res in ures.themes}
+                    break
+        themes = list(themes)
+        themes.sort()
+        theme_to_index = {theme: index for index, theme in enumerate(themes)}
+
+        user_results = []
+        for user in solved:
+            for ures in user:
+                if ures.parallel == parallel:
+                    curr_result = [0] * len(themes)
+                    for res in ures.themes:
+                        curr_result[theme_to_index[res[0]]] = res[3]
+                    user_results.append(curr_result)
                     break
         user_results = list(map(list, zip(*([themes] + user_results))))
+        print(user_results)
         user_results.sort(key=lambda x:-x[1])
         user_results = [[''] + list(map(str, users))] + user_results
         result.append([parallel, DataTable(user_results)]) 
