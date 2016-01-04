@@ -15,37 +15,42 @@ def choose_form(a, form1, form2, form5):
 class SimilarUserData:
     pass
 
-def get_similar_user_data(first_user, parts_1, solved_1, curr_user):
+def get_similar_user_data(first_user, parallels_1, solved_1, curr_user):
     if first_user.id == curr_user.id:
         return None
     result = SimilarUserData()
     result.user = curr_user
 
-    parts = {(part.season, part.parallel) for part in Participation.objects.filter(user=curr_user) if part.parallel.name[0] in "ABCD"} & parts_1
-    if len(parts) == 0:
+    parallels = {part.parallel for part in Participation.objects.filter(user=curr_user) if part.parallel.name[0] in "ABCD"} & parallels_1
+    if len(parallels) == 0:
         return None
 
     solved_2 = themes_by_user(curr_user.id)
-    res_parts_1 = {pr.part for pr in solved_1 if pr.part != 'Всего'}
-    res_parts_2 = {cp.part for cp in solved_2 if cp.part != 'Всего'}
-    res_parts = res_parts_1 & res_parts_2
+    res_parallels_1 = {pr.parallel for pr in solved_1 if pr.parallel != 'Всего'}
+    res_parallels_2 = {cp.parallel for cp in solved_2 if cp.parallel != 'Всего'}
+    res_parallels = res_parallels_1 & res_parallels_2
     
     similarity_data = dict()
     for ures in solved_1:
-        if ures.part in res_parts:
+        if ures.parallel in res_parallels:
             for res in ures.themes:
-                similarity_data[ures.part, res[0]] = similarity_data.get((ures.part, res[0]), 0) + res[3]
+                similarity_data[ures.parallel, res[0]] = similarity_data.get((ures.parallel, res[0]), 0) + res[3]
+                print(res[0], res[3])
+    print("")
     for ures in solved_2:
-        if ures.part in res_parts:
+        if ures.parallel in res_parallels:
             for res in ures.themes:
-                similarity_data[ures.part, res[0]] = similarity_data.get((ures.part, res[0]), 0) - res[3]
+                similarity_data[ures.parallel, res[0]] = similarity_data.get((ures.parallel, res[0]), 0) - res[3]
+                print(res[0], -res[3])
+    print("")
+    print(similarity_data)
 
     similarity_sum = 0
     similarity_count = len(similarity_data)
-    for value in similarity_data.values():
-        similarity_sum += abs(value)
     if similarity_count == 0:
         return None
+    for value in similarity_data.values():
+        similarity_sum += abs(value)
     
     result.similarity = 100 - similarity_sum // similarity_count
 
@@ -53,10 +58,10 @@ def get_similar_user_data(first_user, parts_1, solved_1, curr_user):
 
 def get_similar_users(user):
     result = []
-    parts_1 = {(part.season, part.parallel) for part in Participation.objects.filter(user=user) if part.parallel.name[0] in "ABCD"}
+    parallels_1 = {part.parallel for part in Participation.objects.filter(user=user) if part.parallel.name[0] in "ABCD"}
     solved_1 = themes_by_user(user.id)
     for current_user in User.objects.all():
-        similar_user_data = get_similar_user_data(user, parts_1, solved_1, current_user)
+        similar_user_data = get_similar_user_data(user, parallels_1, solved_1, current_user)
         if similar_user_data is not None:
             result.append(similar_user_data)
     result.sort(key=lambda user: user.similarity, reverse=True)
