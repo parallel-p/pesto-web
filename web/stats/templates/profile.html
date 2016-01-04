@@ -15,14 +15,8 @@
         var options = {
         focusTarget: 'category',
         isStacked: true,
-         hAxis: {
-        textStyle: {
-            fontSize: 14,
-            bold: true,
-            italic: false
-        }
-        },
         width: window.innerWidth - 30,
+        height: 300,
      //   legend: { position: "none" },
         vAxis: {
             title: '',
@@ -38,6 +32,17 @@
                 bold: true,
                 italic: false
             }
+        },
+        hAxis: {
+            textStyle: {
+                fontSize:12,
+            },
+            maxAlternation: 2,
+            maxTextLines: 3,
+            },
+        chartArea: {
+            height: 150,
+            top: 40,
         }
         };
         owner = document.getElementById('themes');
