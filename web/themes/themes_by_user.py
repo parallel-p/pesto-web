@@ -5,7 +5,14 @@ from .models import UserResult
 
 class PartResult:
     def __init__(self, part):
-        self.part = part
+        if part is None:
+            self.parallel = 'Всего'
+            self.part = 'Всего'
+        else:
+            self.parallel = part.parallel.name
+            if part.season.order == 6:
+                self.parallel += ' зима'
+            self.part = str(part)
         self.themes = []
         self.solved = 0
         self.total = 0
@@ -35,7 +42,7 @@ def themes_by_user(user_id):
         part_res = sorted(UserResult.objects.filter(participation=part), key=solved_percent, reverse=True)
         if not part_res:
             continue
-        cur_res = PartResult(str(part))
+        cur_res = PartResult(part)
         for theme_res in part_res:
             cur_res.themes.append([theme_res.theme.name, theme_res.solved, theme_res.total, solved_percent(theme_res)])
             theme = theme_res.theme
@@ -49,7 +56,7 @@ def themes_by_user(user_id):
         cur_res.percent = solved_percent(cur_res)  
         result.append(cur_res)
 
-    total_res = PartResult("Всего")
+    total_res = PartResult(None)
     for theme in themes_total:
         solved, total = themes_total[theme]
         total_res.themes.append([theme.name, solved, total, solved * 100 // total])

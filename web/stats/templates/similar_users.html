@@ -6,7 +6,7 @@
 
 {% block body %}
     <a href="/home" class="logo"><img src="/static/logo2.jpg" class="logo_img"></a>
-        <center><h1>{{ first_user.first_name }} {{ first_user.last_name }}: похожие школьники</h1></center>
+        <center><h1><a href="/user/{{ first_user.id }}">{{ first_user.first_name }} {{ first_user.last_name }}</a>: похожие школьники</h1></center>
         <table align="center" border="1">
             <tr class="name_title">
                 <td width="20"><p><b>#</b></p></td>
