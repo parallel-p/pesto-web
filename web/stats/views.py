@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect, render_to_resp
 from django.http import HttpResponse
 from .models import *
 from themes.themes_by_user import user_themes_chart
-from doreshka.doreshka_by_user import doreshka_by_user_str, rejected_by_user, perfect_by_user
+from doreshka.doreshka_by_user import doreshka_by_user_str, rejected_by_user, perfect_by_user, lang_by_user
 from .forms import AdminThemesForm
 from django import forms
 import tool_stat_themes_count
@@ -19,7 +19,8 @@ def profile(request, user_id):
                                             'themes': user_themes_chart(user_id),
                                             'doreshka': doreshka_by_user_str(user_id),
                                             'rejected': rejected_by_user(user_id),
-                                            'perfect': perfect_by_user(user_id)})
+                                            'perfect': perfect_by_user(user_id),
+                                            'lang': lang_by_user(user_id)})
 
 def users(request):
     users = User.objects.order_by('last_name', 'first_name')
