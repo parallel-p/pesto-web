@@ -27,7 +27,7 @@ def fill_unknown_participations(sqlite_dir):
         if parallel_name[0] not in "PKMWS" and len(sqlite_cur.fetchall()) == 0:
             season_name = sqlite_cur.execute('SELECT name FROM stats_season WHERE id=?', (season_id,)).fetchone()[0]
             first_name, last_name = sqlite_cur.execute('SELECT first_name, last_name FROM stats_user WHERE id=?', (user_id,)).fetchone()
-            print(part_id, last_name, first_name, season_name, parallel_name)
+            print(part_id, last_name, " ", first_name, "  ", season_name, parallel_name)
 
     sqlite_db.close_connection()
 
