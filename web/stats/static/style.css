@@ -11,6 +11,10 @@ table {
     border-collapse: collapse;
 }
 
+textarea {
+    resize: none;
+}
+
 .blank
 {
     background-color:transparent;
@@ -40,6 +44,12 @@ table p {
     bottom:0;
     margin-bottom:0;
 }
+.counter {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    margin-bottom: 0;
+}
 
 .text {
     color: black;
@@ -62,11 +72,25 @@ table p {
     padding: 50px 0 0 0;
 }
 
+.feedback_text {
+    text-align: center;
+    font-size: 16pt;
+}
+
 .layer {
     margin: auto;
     width: 60%;
     background: #fff;
     border-radius: 10px;
+}
+
+.input_padding {
+    padding: 6px 0 0 0;
+}
+
+.feedback_form_padding {
+    padding: 15px 20px 20px 20px;
+    margin-top:50px;
 }
 
 .button {
@@ -114,4 +138,27 @@ table p {
     left:0;
     top:0;
     width: 10%;
+}
+
+#name_filter {
+    float:right;
+    margin-right:10px;
+}
+
+.center_text {
+    text-align: center;
+}
+
+.table_header_blue {
+    color: blue;
+   }
+
+.table_header_blue:hover {
+    color: red;
+    text-decoration: underline;
+}
+
+.giant {
+    text-align:center;
+    font-size:130pt;
 }

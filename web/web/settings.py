@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '&(t#_1rf_-@$n)u$t%6!56f45@(+zcpfwq83v1_d^fmitac^)$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'stats',
     'themes',
     'doreshka',
+    'feedback',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -15,14 +15,8 @@
         var options = {
         focusTarget: 'category',
         isStacked: true,
-         hAxis: {
-        textStyle: {
-            fontSize: 14,
-            bold: true,
-            italic: false
-        }
-        },
         width: window.innerWidth - 30,
+        height: 300,
      //   legend: { position: "none" },
         vAxis: {
             title: '',
@@ -38,6 +32,17 @@
                 bold: true,
                 italic: false
             }
+        },
+        hAxis: {
+            textStyle: {
+                fontSize:12,
+            },
+            maxAlternation: 2,
+            maxTextLines: 3,
+            },
+        chartArea: {
+            height: 150,
+            top: 40,
         }
         };
         owner = document.getElementById('themes');
@@ -49,7 +54,6 @@
             options.vAxis.title = data[i][0];
             chart1.draw(data[i][1], options);
         }
-
     }
     </script>
     <h1>{{user.first_name}} {{user.last_name}}</h1>
@@ -58,6 +62,10 @@
     {% else %}
         <p>Среднее время дорешки неизвестно.</p>
     {% endif %}
+    <p>Rejected submits: {{ rejected }}.</p>
+    <p>Сдано с первой попытки: {{ perfect }}.</p>
+    <p>Основной язык: {{ lang }}.</p>
+    <p><a href="/similar_users/{{ user.id }}" class="button">Похожие школьники</a></p>
     <div id="themes">
     </div>
     <p>

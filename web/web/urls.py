@@ -24,4 +24,9 @@ urlpatterns = [
     url(r'^doreshka/', include('doreshka.urls')),
     url(r'^admin/themes', stats.views.admin_themes, name='admin_themes'),
     url(r'^admin/', admin.site.urls),
+    url(r'^feedback/', include('feedback.urls'))
 ]
+handler400 = 'stats.views.bad_request'
+handler403 = 'stats.views.permission_denied'
+handler404 = 'stats.views.page_not_found'
+handler500 = 'stats.views.server_error'

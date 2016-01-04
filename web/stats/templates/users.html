@@ -9,6 +9,29 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script>
+    enru_array = ['qй', 'wц', 'eу', 'rк', 'tе', 'yн', 'uг', 'iш', 'oщ', 'pз', '[х', ']ъ', 'aф', 'sы', 'dв', 'fа', 'gп', 'hр', 'jо', 'kл', 'lд', ';ж', '\'э', 'zя', 'xч', 'cс', 'vм', 'bи', 'nт', 'mь', ',б', '.ю']
+    function transformEnRu(str)
+    {
+        res = '';
+        for(var ch in str)
+        {
+            var added = 0;
+            for(var en in enru_array)
+            {
+                if(str[ch] == enru_array[en][0])
+                {
+                    res += enru_array[en][1];
+                    added = 1;
+                    break;
+                }
+            }
+            if(!added)
+            {
+                res += str[ch];
+            }
+        }
+        return res;
+    }
     function updateCounter()
     {
         $('#selected').text('Выбрано: ' + selected);
@@ -41,6 +64,16 @@
             selected += event.target.checked ? 1 : -1;
             updateCounter();
         });
+        $name_cell = $('.name_cell');
+        $('#name_filter').val('');
+        $('#name_filter').on('input',function(event){
+            var txt = $('#name_filter').val().toLowerCase();
+            txt = [txt, transformEnRu(txt)]
+            $name_cell.each(function(){
+                var cur_txt = this.innerHTML.toLowerCase();
+                this.style.display = (cur_txt.search(txt[0]) >= 0 || cur_txt.search(txt[1]) >= 0)?'table-row':'none';
+            });
+        });
     });
     </script>
     <div style="position:fixed;right:5px;text-align:center;">
@@ -58,7 +91,7 @@
     </div>
         <table align="center" border="1" width="500">
             <tr class="name_title">
-                <td><p><b>Фамилия, имя</b></p>
+                <td><p><b>Фамилия, имя</b><input id="name_filter" autofocus></p>
                 </td>
                 </tr>
         {% for user in users %}

@@ -17,6 +17,60 @@ def fill_doreshka(default_dinner=14*3600):
     season_cache = {}
     cnt = 0
     part_max = {}
+
+
+    users = User.objects.all()
+    res_by_user_rj = {}
+    res_by_user_pf = {}
+    first_submit_by_user_problem = {}
+    langs_by_user = {}
+    for user in users:
+        res_by_user_rj[user.id] = 0
+        res_by_user_pf[user.id] = 0
+        first_submit_by_user_problem[user.id] = {}
+        langs_by_user[user.id] = {}
+
+    submits = Submit.objects.all()
+    for submit in submits:
+        cnt += 1
+        if cnt % 100 == 0:
+            print(cnt, '/', len(submits), 'submits processed')
+
+        if submit.outcome == 'RJ' or submit.outcome == 'SV':
+            try:
+                res_by_user_rj[submit.participation.user.id] += 1
+            except Exception:
+                pass
+        try:
+            if submit.problem.id not in first_submit_by_user_problem[submit.participation.user.id].keys():
+                first_submit_by_user_problem[submit.participation.user.id][submit.problem.id] = (submit.timestamp, submit.outcome)
+            if first_submit_by_user_problem[submit.participation.user.id][submit.problem.id][0] > submit.timestamp:
+                first_submit_by_user_problem[submit.participation.user.id][submit.problem.id] = (submit.timestamp, submit.outcome)
+        except Exception:
+            pass
+
+        try:
+            if submit.lang_id not in langs_by_user[submit.participation.user.id]:
+                langs_by_user[submit.participation.user.id][submit.lang_id] = 0
+            langs_by_user[submit.participation.user.id][submit.lang_id] += 1
+        except Exception:
+            pass
+
+    lang_by_user = {}
+    for user in users:
+        for problem_id in first_submit_by_user_problem[user.id]:
+            try:
+                if first_submit_by_user_problem[user.id][problem_id][1] == 'OK':
+                    res_by_user_pf[user.id] += 1
+            except Exception:
+                pass
+
+        try:
+            lang_by_user[user.id] = max(langs_by_user[user.id].items(), key=lambda x: x[1])[0]
+        except Exception:
+            lang_by_user[user.id] = -1
+
+    cnt = 0
     for user in users:
         cnt += 1
         if cnt % 100 == 0:
@@ -46,7 +100,7 @@ def fill_doreshka(default_dinner=14*3600):
         if not max_time_by_day:
             continue
         avg_time = int(sum(max_time_by_day.values()) / len(max_time_by_day))
-        res = UserResult(user=user, average_time=avg_time)
+        res = UserResult(user=user, average_time=avg_time, rj=res_by_user_rj[user.id], pf=res_by_user_pf[user.id], lg=lang_by_user[user.id])
         res.save()
     for pid in part_max:
         if not part_max[pid]:

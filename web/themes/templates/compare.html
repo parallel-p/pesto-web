@@ -11,13 +11,8 @@
         var data = {{ data|safe }};
         var options = {
         focusTarget: 'category',
-         hAxis: {
-        textStyle: {
-            fontSize: 14,
-            bold: true,
-            italic: false
-        }
-        },
+        width: window.innerWidth - 30,
+        height: 300,
         vAxis: {
             title: '',
             minValue: 0,
@@ -33,6 +28,17 @@
                 bold: true,
                 italic: false
             }
+        },
+        hAxis: {
+            textStyle: {
+                fontSize:12,
+            },
+            maxAlternation:2,
+            maxTextLines: 3,
+            },
+        chartArea: {
+            height: 150,
+            top: 40,
         }
         };
         for(var i in data)
@@ -46,7 +52,7 @@
         if(!data.length)
         {
             var p = document.createElement('p');
-            p.innerHTML = "Выбранные школьники не были вместе ни в одной параллели.";
+            p.innerHTML = "У выбранных школьников нет общих параллелей.";
             document.body.appendChild(p);
         }
 
