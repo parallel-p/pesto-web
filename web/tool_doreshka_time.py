@@ -34,7 +34,7 @@ def fill_doreshka(default_dinner=14*3600):
         if cnt % 100 == 0:
             print(cnt, '/', len(submits), 'submits processed')
 
-        if submit.outcome == 'RJ':
+        if submit.outcome == 'RJ' or submit.outcome == 'SV':
             try:
                 res_by_user_rj[submit.participation.user.id] += 1
             except Exception:
