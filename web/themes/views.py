@@ -14,20 +14,20 @@ def compare(request, users):
     users = sorted(map(int, users.split(',')))
     users = [get_object_or_404(User, id=uid) for uid in users]
     solved = [themes_by_user(user.id) for user in users]
-    parts = [pr.part for pr in solved[0]]
+    parallels = [pr.parallel for pr in solved[0]]
     for ures in solved[1:]:
-        all_parts = [cp.part for cp in ures]
-        parts = [pr for pr in parts if pr in all_parts]  # participated by everyone
+        all_parallels = [cp.parallel for cp in ures]
+        parallels = [pr for pr in parallels if pr in all_parallels]  # participated by everyone
     
     result = []
-    for part in parts:
-        if part == 'Всего':
+    for parallel in parallels:
+        if parallel == 'Всего':
             continue
         user_results = []
         themes = []
         for user in solved:
             for ures in user:
-                if ures.part == part:
+                if ures.parallel == parallel:
                     ures.themes.sort()
                     user_results.append([res[3] for res in ures.themes])
                     themes = [res[0] for res in ures.themes]
@@ -35,5 +35,5 @@ def compare(request, users):
         user_results = list(map(list, zip(*([themes] + user_results))))
         user_results.sort(key=lambda x:-x[1])
         user_results = [[''] + list(map(str, users))] + user_results
-        result.append([part, DataTable(user_results)]) 
+        result.append([parallel, DataTable(user_results)]) 
     return render(request, 'compare.html', {'data': str(result)})
