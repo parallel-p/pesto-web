@@ -87,6 +87,21 @@ def parse_ejudge2(sqlite_dir, mysql_config):
     ids_in_ej = {}
     num = 0
     for id, first_name, last_name in sqlite_id_first_second:
+        parts = list(sqlite_cur.execute('SELECT id, season_id, parallel_id FROM stats_participation WHERE stats_participation.user_id=?', (id,)))
+        ok = False
+        for part_id, season_id, parallel_id in parts:
+            year, order = sqlite_cur.execute('SELECT year, "order" FROM stats_season WHERE id=?', (season_id,)).fetchone()
+            if (year < 2008 or (year == 2008 and order != 6)) or (year == 2013 and order == 6):
+                continue
+            parallel_name = sqlite_cur.execute('SELECT name FROM stats_parallel WHERE id=?', (parallel_id,)).fetchone()[0]
+            sqlite_cur.execute('SELECT id FROM stats_submit WHERE participation_id=?', (part_id,))
+            if parallel_name[0] not in "PKMWS" and len(sqlite_cur.fetchall()) == 0:
+                ok = True
+                break
+        if not ok:
+            continue
+        print(first_name, last_name)
+
         first_name_rp = (' ' + first_name + ' ').replace("Ё", "Е").replace("ё", "е")
         last_name_rp = (' ' + last_name + ' ').replace("Ё", "Е").replace("ё", "е")
         if first_name in FIRST_NAME_CONVERT:
@@ -130,5 +145,5 @@ def parse_ejudge2(sqlite_dir, mysql_config):
     mysql_db.close_connection()
 
 if __name__ == "__main__":
-    config = {'user': 'root', 'passwd': '5382JOihyt', 'host': '192.168.2.13', 'port': 3306, 'db': 'ejudgedata'}
+    config = {'user': 'root', 'passwd': '5382JOihyt', 'host': '127.0.0.1', 'port': 3306, 'db': 'ejudgedata'}
     parse_ejudge2('db.sqlite3', config)
