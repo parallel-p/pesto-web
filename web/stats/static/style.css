@@ -11,6 +11,10 @@ table {
     border-collapse: collapse;
 }
 
+textarea {
+    resize: none;
+}
+
 .blank
 {
     background-color:transparent;
@@ -62,11 +66,25 @@ table p {
     padding: 50px 0 0 0;
 }
 
+.feedback_text {
+    text-align: center;
+    font-size: 16pt;
+}
+
 .layer {
     margin: auto;
     width: 60%;
     background: #fff;
     border-radius: 10px;
+}
+
+.input_padding {
+    padding: 6px 0 0 0;
+}
+
+.feedback_form_padding {
+    padding: 15px 20px 20px 20px;
+    margin-top:50px;
 }
 
 .button {
@@ -133,3 +151,4 @@ table p {
     color: red;
     text-decoration: underline;
 }
+

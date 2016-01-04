@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'stats',
     'themes',
     'doreshka',
+    'feedback',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

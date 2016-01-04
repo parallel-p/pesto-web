@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    #name {
+        width: 100%; /* Ширина поля в пикселах */
+    } 
+    #text {
+        width: 100%; /* Ширина поля в пикселах */
+    } 
+</style>
+{% endblock %}
+{% block body %}
+    <div class="logo"><a href="/home"><img src="/static/logo2.jpg" class="logo_img"></a></div>
+    <div class="wrapper">
+        <div class="layer">
+            <div class="feedback_form_padding">
+                <center><h1>Обратная связь</h1></center>
+                <div class="feedback_text">При помощи этой формы вы можете связаться с нами.</div>
+                <form action="/feedback/form" method="post" onsubmit="alert('Спасибо за ваше сообщение!');">
+                    {% csrf_token %}
+                    <div id="fields" class="input_padding">
+                        <input type="text" id="name" name="name" maxlength="50" required placeholder="Ваше имя">
+                    </div>
+                    <div id="fields" class="input_padding">
+                        <textarea id="text" name="text" rows="10" maxlength="2016" required></textarea>
+                    </div>
+                    <div id="fields" class="input_padding">
+                        <input type="submit" value="Отправить" class="button">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
