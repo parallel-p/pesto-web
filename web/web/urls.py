@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^doreshka/', include('doreshka.urls')),
     url(r'^admin/themes', stats.views.admin_themes, name='admin_themes'),
     url(r'^admin/', admin.site.urls),
+    url(r'^feedback/', include('feedback.urls'))
 ]

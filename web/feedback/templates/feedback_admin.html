@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <title>Просмотр сообщений - pesto-web</title>
+    </head>
+
+    <body>
+        {% for message in messages %}
+            <b>{{ message.time }}</b><br>
+            <b>{{ message.name }}</b><br>
+            {{ message.text }}
+            <hr>
+        {% endfor %}
+    </body>
+</html>
