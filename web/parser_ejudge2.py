@@ -2,28 +2,31 @@ import os.path
 import sqlite3
 import pymysql
 
-FIRST_NAME_CONVERT = {
-    "Наталья": " Наталия ",
-    "Наталия": " Наталья ",
-    "Евгений": " Женя ",
-    "Екатерина": " Катя ",
-    "Сергей": " Сережа ",
-    "Анна": " Аня ",
-    "Елена": " Лена ",
-    "Юлия": " Юля ",
-    "Иван": " Ваня ",
-    "Константин": " Костя ",
-    "Михаил": " Миша ",
-    "Владислав": " Влад ",
-    "Роман": " Рома ",
-    "Даниил": " Данил ",
-    "Данил": " Даня ",
-    "Мария": " Марья ",
-    "Марья": " Мария ",
-    "Григорий": " Гриша ",
-    "Александр": " Саша ",
-    "Дмитрий": " Дима "
-}
+NAME_CONVERT = [
+   ["Наталья", "Наталия"],
+   ["Евгений", "Женя"],
+   ["Екатерина", "Катя", "Катерина"],
+   ["Сергей", "Сережа"],
+   ["Анна", "Аня"],
+   ["Елена", "Лена", "Алёна"],
+   ["Юлия", "Юля"],
+   ["Иван", "Ваня"],
+   ["Константин", "Костя", "Констанитин"],
+   ["Михаил", "Миша"],
+   ["Владислав", "Влад"],
+   ["Роман", "Рома"],
+   ["Данииил", "Даниил", "Данил", "Даня"],
+   ["Мария", "Марья", "Маша"],
+   ["Григорий", "Гриша"],
+   ["Александр", "Саша"],
+   ["Ибрагим", "Ибрахим"],
+   ["Мадибек", "Мадибеков"],
+   ["Андрей", "Андреей"],
+   ["Жуссупов", "Жусупов"],
+   ["Белоногов", "Белонгов"],
+   ["Одилзода", "Одил"],
+   ["Мехрдод", "Мехрдоди"]
+]
 
 class SQLiteConnector:
     def __init__(self, db_dir):
@@ -35,7 +38,6 @@ class SQLiteConnector:
     def close_connection(self):
         self.connection.commit()
         self.connection.close()
-
 
 class MySQLConnector:
     """Example of config
@@ -85,7 +87,6 @@ def parse_ejudge2(sqlite_dir, mysql_config):
 
     print('OK\nWRITING SUBMITS...', end='')
     ids_in_ej = {}
-    num = 0
     for id, first_name, last_name in sqlite_id_first_second:
         parts = list(sqlite_cur.execute('SELECT id, season_id, parallel_id FROM stats_participation WHERE stats_participation.user_id=?', (id,)))
         ok = False
@@ -102,17 +103,29 @@ def parse_ejudge2(sqlite_dir, mysql_config):
             continue
         print(first_name, last_name)
 
-        first_name_rp = (' ' + first_name + ' ').replace("Ё", "Е").replace("ё", "е")
-        last_name_rp = (' ' + last_name + ' ').replace("Ё", "Е").replace("ё", "е")
-        if first_name in FIRST_NAME_CONVERT:
-            first_name_1 = FIRST_NAME_CONVERT[first_name]
-            first_name_1_rp = (' ' + first_name_1 + ' ').replace("Ё", "Е").replace("ё", "е")
-        else:
-            first_name_1 = None
-            first_name_1_rp = None
-        last_name_1_rp = None
-        if "(" in last_name:
-            last_name_rp, last_name_1_rp = last_name_rp.replace("(", " ").replace(")", " ").split()[:2]
+        first_name_1 = first_name.replace("(", " ").replace(")", " ").split()
+        first_name_2 = []
+        for ln in first_name_1:
+            new_first_names = [ln]
+            for variants in NAME_CONVERT:
+                if ln in variants:
+                    new_first_names = variants
+            first_name_2 += new_first_names
+        first_name_1 = first_name_2
+        first_name_1_rp = [(' ' + name + ' ').replace("Ё", "Е").replace("ё", "е") for name in first_name_1]
+
+        last_name_1 = [last_name]
+        last_name_1 = last_name.replace("(", " ").replace(")", " ").split()
+        last_name_2 = []
+        for ln in last_name_1:
+            new_last_names = [ln]
+            for variants in NAME_CONVERT:
+                if ln in variants:
+                    new_last_names = variants
+            last_name_2 += new_last_names
+        last_name_1 = last_name_2
+        last_name_1_rp = [(' ' + name + ' ').replace("Ё", "Е").replace("ё", "е") for name in last_name_1]
+
         for user_id, contest_id, name in ejudge_usr_id_and_name_list:
             try:
                 parallel = sqlite_contest_parallel_season[contest_id // 100 * 100][0]
@@ -122,14 +135,20 @@ def parse_ejudge2(sqlite_dir, mysql_config):
             if name is None:
                 continue
             new_name = (' ' + name + ' ').replace("Ё", "Е").replace("ё", "е")
-            if (parallel, season, id) in participation_dict and \
-               ',' not in name and \
-               (first_name_rp in new_name or (first_name_1_rp is not None and first_name_1_rp in new_name)) and \
-               (last_name_rp in new_name or (last_name_1_rp is not None and last_name_1_rp in new_name)):
+            first_name_ok = False
+            for fn in first_name_1_rp:
+                if fn in new_name:
+                    first_name_ok = True
+                    break
+            last_name_ok = False
+            for ln in last_name_1_rp:
+                if ln in new_name:
+                    last_name_ok = True
+                    break
+            if (first_name_ok and last_name_ok and
+                (parallel, season, id) in participation_dict and
+                ',' not in name):
                 ids_in_ej[(user_id, contest_id // 100 * 100)] = id
-        num += 1
-        if num % 10 == 0:
-            print(num, "/", len(sqlite_id_first_second))
     for id, problem_id, ejudge_user_id, ejudge_contest_id in submits:
         try:
             user_id = ids_in_ej[ejudge_user_id, ejudge_contest_id // 100 * 100]
